@@ -1,10 +1,106 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import { gql, useQuery } from '@apollo/client'
+import { RootStackScreenProps, RootTabScreenProps } from '../types/types';
 
-export default function TabTwoScreen() {
+const MONSTER_DATA = gql`
+  query  GetMonsters {
+    monsters {
+      actions{
+        attack_bonus
+        damage{
+          damage_dice
+        damage_type{
+          index
+          name
+          url
+          }
+        }
+      }
+      alignment
+      armor_class
+      challenge_rating
+      charisma
+      condition_immunities{
+        index
+        name
+        url
+      }
+      constitution
+      damage_immunities
+      damage_resistances
+      damage_vulnerabilities
+      dexterity
+      forms{
+        index
+        name
+        url
+      }
+      hit_dice
+      hit_points
+      index
+      intelligence
+      languages
+      legendary_actions{
+        attack_bonus
+        desc
+        name
+      }
+      name
+      proficiencies {
+        proficiency {
+          index
+          name
+          url
+        }
+        value
+      }
+      reactions {
+        desc
+        name
+      }
+      senses {
+        blindsight
+        darkvision
+        passive_perception
+        tremorsense
+        truesight
+      }
+      size
+      special_abilities {
+        desc
+        name
+      }
+      speed {
+        burrow
+        climb
+        fly
+        hover
+        swim
+        walk
+      }
+      strength
+      subtype
+      type
+      url
+      wisdom
+      xp    
+    }
+  }
+`
+
+
+export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'>) {
+
+  const monsterData = useQuery(MONSTER_DATA)
+  useEffect(() => {
+    console.log(monsterData)
+  }, [monsterData])
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab Two</Text>
