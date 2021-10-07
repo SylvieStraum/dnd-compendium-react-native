@@ -1,8 +1,7 @@
 module.exports = {
   client: {
     service: {
-      name:'dnd5eapi',
-      url:'https://www.dnd5eapi.co/graphql',
+      name: 'dnd-api',
       localSchemaFile: './schema.graphql'
     }
   }

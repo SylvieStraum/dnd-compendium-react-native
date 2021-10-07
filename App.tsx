@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './src/hooks/useCachedResources';
 import useColorScheme from './src/hooks/useColorScheme';
 import Navigation from './src/navigation';
-import { client as apolloclient} from './src/services/graph/graph';
+import { client as apolloclient} from './src/graph/graph';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
