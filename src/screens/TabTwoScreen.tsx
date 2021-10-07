@@ -1,22 +1,22 @@
-import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useEffect } from 'react'
+import { StyleSheet } from 'react-native'
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
-import { gql, useQuery } from '@apollo/client'
-import { RootStackScreenProps, RootTabScreenProps } from '../types/types';
+import EditScreenInfo from '../components/EditScreenInfo'
+import { Text, View } from '../components/Themed'
+import { useQuery, gql } from '@apollo/client'
+import { RootTabScreenProps } from '../types/types'
 
 const MONSTER_DATA = gql`
-  query  GetMonsters {
+  query GetAllMonsterData {
     monsters {
-      actions{
+      actions {
         attack_bonus
-        damage{
+        damage {
           damage_dice
-        damage_type{
-          index
-          name
-          url
+          damage_type {
+            index
+            name
+            url
           }
         }
       }
@@ -24,7 +24,7 @@ const MONSTER_DATA = gql`
       armor_class
       challenge_rating
       charisma
-      condition_immunities{
+      condition_immunities {
         index
         name
         url
@@ -34,7 +34,7 @@ const MONSTER_DATA = gql`
       damage_resistances
       damage_vulnerabilities
       dexterity
-      forms{
+      forms {
         index
         name
         url
@@ -44,7 +44,7 @@ const MONSTER_DATA = gql`
       index
       intelligence
       languages
-      legendary_actions{
+      legendary_actions {
         attack_bonus
         desc
         name
@@ -87,27 +87,30 @@ const MONSTER_DATA = gql`
       type
       url
       wisdom
-      xp    
+      xp
     }
   }
 `
 
-
-export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'>) {
-
+export default function TabTwoScreen({
+  navigation,
+}: RootTabScreenProps<'TabTwo'>) {
   const monsterData = useQuery(MONSTER_DATA)
   useEffect(() => {
     console.log(monsterData)
   }, [monsterData])
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
       <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -125,4 +128,4 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
-});
+})
