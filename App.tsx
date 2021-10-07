@@ -5,7 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import useCachedResources from './src/hooks/useCachedResources';
 import useColorScheme from './src/hooks/useColorScheme';
-import Navigation from './src/navigation';
+import { Navigation } from './src/navigation';
 import { client as apolloclient} from './src/graph/graph';
 
 export default function App() {
@@ -18,7 +18,7 @@ export default function App() {
     return (
       <ApolloProvider client={apolloclient}>
         <SafeAreaProvider>
-          <Navigation colorScheme={colorScheme} />
+          <Navigation />
           <StatusBar />
         </SafeAreaProvider>
       </ApolloProvider>

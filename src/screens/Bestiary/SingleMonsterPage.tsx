@@ -1,14 +1,14 @@
-import React, { useEffect, useCallback } from 'react'
-import { StyleSheet, FlatList, View, Text } from 'react-native'
+import React, { useEffect, useCallback } from "react";
+import { StyleSheet, FlatList, View, Text, Dimensions, Pressable } from "react-native";
 
-import { useQuery, gql } from '@apollo/client'
-import { RootTabScreenProps } from '../types/types'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Monster } from '../types/monsterTypes'
+import { useQuery, gql, useLazyQuery } from "@apollo/client";
+import { Monster } from "../../types/monsterTypes";
+import { Screen } from "../../types";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const MONSTER_DATA = gql`
-  query GetAllMonsterData {
-    monsters {
+const MONSTER_BY_NAME = gql`
+  query GetMonster($name: String) {
+    monster(filter: { name: $name }) {
       actions {
         attack_bonus
         damage {
@@ -90,56 +90,52 @@ const MONSTER_DATA = gql`
       xp
     }
   }
-`
+`;
 
-export default function TabTwoScreen({
+export const SingleMonsterPage: Screen<{ name: string }> = ({
   navigation,
-}: RootTabScreenProps<'TabTwo'>) {
-  const monsterData = useQuery(MONSTER_DATA)
+  route: {
+    params: { name },
+  },
+}) => {
+  const screen = Dimensions.get("screen");
+  const [findMonster, data] = useLazyQuery(MONSTER_BY_NAME);
+  useEffect(() => {
+    findMonster({
+      variables: {
+        name:name,
+      },
+    });
+  }, [name]);
 
- 
+  console.log(data)
   return (
-    <View style={styles.container}>
-      <FlatList 
-      data={monsterData.data}
-      renderItem={({item}:{item:Monster}) => {
-        console.log(item)
-        return(
-        <View style={styles.listItemContainer}>
-          <Text>{item.name}</Text>
-        </View>
-      )}}
-      />
-    </View>
-  )
-}
+    <SafeAreaView style={[styles.container, { width: screen.width }]}>
+      <Pressable onPress={()=>{
+       navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Bestiary')
+        }}>
+        <Text>
+          go back
+        </Text>
+      </Pressable>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height:'100%',
-    width:'100%'
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   separator: {
     marginVertical: 30,
     height: 1,
-    width: '80%',
+    width: "80%",
   },
-  listItemContainer: {
-    marginVertical: 8,
-    padding: 6,
-    paddingRight: 14,
-    borderRadius: 10,
-    minHeight: 80,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor:'red'
-  },
-})
+});
