@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
-import { StyleSheet } from 'react-native'
+import React, { useEffect, useCallback } from 'react'
+import { StyleSheet, FlatList, View, Text } from 'react-native'
 
-import EditScreenInfo from '../components/EditScreenInfo'
-import { Text, View } from '../components/Themed'
 import { useQuery, gql } from '@apollo/client'
 import { RootTabScreenProps } from '../types/types'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Monster } from '../types/monsterTypes'
 
 const MONSTER_DATA = gql`
   query GetAllMonsterData {
@@ -96,19 +96,20 @@ export default function TabTwoScreen({
   navigation,
 }: RootTabScreenProps<'TabTwo'>) {
   const monsterData = useQuery(MONSTER_DATA)
-  useEffect(() => {
-    console.log(monsterData)
-  }, [monsterData])
 
+ 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
+      <FlatList 
+      data={monsterData.data}
+      renderItem={({item}:{item:Monster}) => {
+        console.log(item)
+        return(
+        <View style={styles.listItemContainer}>
+          <Text>{item.name}</Text>
+        </View>
+      )}}
       />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
     </View>
   )
 }
@@ -118,6 +119,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    height:'100%',
+    width:'100%'
   },
   title: {
     fontSize: 20,
@@ -127,5 +130,16 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  listItemContainer: {
+    marginVertical: 8,
+    padding: 6,
+    paddingRight: 14,
+    borderRadius: 10,
+    minHeight: 80,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor:'red'
   },
 })
