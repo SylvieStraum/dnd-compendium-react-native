@@ -21,7 +21,7 @@ interface CardProps extends ViewProps{
 export const Card = ({children, style}:CardProps)=>{
     
     return(
-        <View style={styles.card}>
+        <View style={[styles.card, style]}>
             {children}
         </View>
     )

@@ -99,6 +99,9 @@ const MONSTER_BY_NAME = gql`
     }
   }
 `
+interface ApolloMonster {
+  monster:Monster
+}
 
 export const SingleMonsterPage: Screen<{ name: string }> = ({
   navigation,
@@ -107,32 +110,26 @@ export const SingleMonsterPage: Screen<{ name: string }> = ({
   },
 }) => {
   const screen = Dimensions.get("screen");
-  const [findMonster, {data, loading}] = useLazyQuery(MONSTER_BY_NAME, {
+  const [findMonster, {data, loading}] = useLazyQuery<
+  ApolloMonster
+  >(MONSTER_BY_NAME, {
     variables: {
       name: name,
     },
-    fetchPolicy:'cache-first'
+    fetchPolicy:'network-only'
   });
   useEffect(() => {
     findMonster();
   }, []);
 
-  if(loading){
+  if(loading || !data?.monster){
     return null
   }
 
   console.log(data)
   return (
     <SafeAreaView style={[styles.container, { width: screen.width }]}>
-      <Pressable
-        onPress={() => {
-          navigation.canGoBack()
-            ? navigation.goBack()
-            : navigation.navigate("Bestiary");
-        }}
-      >
-        <Text>go back</Text>
-      </Pressable>
+     
     </SafeAreaView>
   );
 };
