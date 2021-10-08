@@ -1,4 +1,4 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client'
+import { ApolloClient, InMemoryCache, createHttpLink, DefaultOptions } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 
 const GRAPH_URL = 'https://www.dnd5eapi.co/graphql'
@@ -19,5 +19,5 @@ const authLink = setContext(async (_, { headers }) => {
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache()
 })

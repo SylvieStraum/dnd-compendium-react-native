@@ -8,8 +8,8 @@ const Stack = createStackNavigator<BestiaryStackParamList>();
 
 export const BestiaryStackNavigator: React.FC<unknown> = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown:false}}>
-      <Stack.Screen name="BestiaryHomePage" component={BestiaryPage} />
+    <Stack.Navigator screenOptions={{headerShown:false }} >
+      <Stack.Screen name="BestiaryHome" component={BestiaryPage} />
       <Stack.Screen name="IndividualMonsterPage" component={SingleMonsterPage}/>
     </Stack.Navigator>
   );

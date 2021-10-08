@@ -18,9 +18,9 @@ Settings:undefined;
 };
 
 export type BestiaryStackParamList = {
-  BestiaryHomePage: undefined;
+  BestiaryHome: undefined;
   IndividualMonsterPage: { name: string };
-  filterPage: undefined;
+  FilterPage: undefined;
 };
 
 export type OverallStackParamList = RootStackParamList &

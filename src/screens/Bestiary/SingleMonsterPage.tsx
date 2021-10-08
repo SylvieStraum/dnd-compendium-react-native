@@ -1,13 +1,21 @@
 import React, { useEffect, useCallback } from "react";
-import { StyleSheet, FlatList, View, Text, Dimensions, Pressable } from "react-native";
+import {
+  StyleSheet,
+  FlatList,
+  View,
+  Text,
+  Dimensions,
+  Pressable,
+} from "react-native";
 
-import { useQuery, gql, useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import { Monster } from "../../types/monsterTypes";
 import { Screen } from "../../types";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+
 const MONSTER_BY_NAME = gql`
-  query GetMonster($name: String) {
+  query GetMonster($name: String!) {
     monster(filter: { name: $name }) {
       actions {
         attack_bonus
@@ -90,7 +98,7 @@ const MONSTER_BY_NAME = gql`
       xp
     }
   }
-`;
+`
 
 export const SingleMonsterPage: Screen<{ name: string }> = ({
   navigation,
@@ -99,24 +107,31 @@ export const SingleMonsterPage: Screen<{ name: string }> = ({
   },
 }) => {
   const screen = Dimensions.get("screen");
-  const [findMonster, data] = useLazyQuery(MONSTER_BY_NAME);
+  const [findMonster, {data, loading}] = useLazyQuery(MONSTER_BY_NAME, {
+    variables: {
+      name: name,
+    },
+    fetchPolicy:'cache-first'
+  });
   useEffect(() => {
-    findMonster({
-      variables: {
-        name:name,
-      },
-    });
-  }, [name]);
+    findMonster();
+  }, []);
+
+  if(loading){
+    return null
+  }
 
   console.log(data)
   return (
     <SafeAreaView style={[styles.container, { width: screen.width }]}>
-      <Pressable onPress={()=>{
-       navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Bestiary')
-        }}>
-        <Text>
-          go back
-        </Text>
+      <Pressable
+        onPress={() => {
+          navigation.canGoBack()
+            ? navigation.goBack()
+            : navigation.navigate("Bestiary");
+        }}
+      >
+        <Text>go back</Text>
       </Pressable>
     </SafeAreaView>
   );
