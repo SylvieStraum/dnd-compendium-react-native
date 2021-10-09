@@ -11,12 +11,12 @@ import { gql, useLazyQuery, ApolloQueryResult, useQuery } from "@apollo/client";
 import {
   SmallMonsterCall,
   SortFindManyMonsterInput,
-} from "../../types/monsterTypes";
-import { Navigation, Screen } from "../../types";
+} from "../../../types/monsterTypes";
+import { Navigation, Screen } from "../../../types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BestiaryListItem } from "../../components/BestiaryListItem";
-import { useFocusEffect, useIsFocused } from "@react-navigation/core";
-import { CARD_HEIGHT } from "../../components/Card";
+import { BestiaryListItem } from "./BestiaryListItem";
+import { useIsFocused } from "@react-navigation/core";
+import { CARD_HEIGHT } from "../../../components/Card";
 
 interface ApolloMonsters {
   monsters: SmallMonsterCall[];
@@ -40,17 +40,15 @@ const MONSTER_DATA = gql`
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
+  const isFocused = useIsFocused();
   const [monstersArr, setMonstersArr] = useState<SmallMonsterCall[]>([]);
   const [sortStyle, setSortStyle] =
     useState<SortFindManyMonsterInput>("NAME_ASC");
-  const [isFetching, setIsFetching] = useState(false);
   const y = new Animated.Value(0);
 
-  useFocusEffect(
-    useCallback(() => {
-      !monstersArr.length && fetchMonsters();
-    }, [])
-  );
+  useEffect(() => {
+    fetchMonsters();
+  }, [isFocused]);
 
   const [fetchMonsters, { data, fetchMore, loading, refetch }] = useLazyQuery(
     MONSTER_DATA,
@@ -72,6 +70,15 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
     useNativeDriver: true,
   });
 
+  const getItemLayout = useCallback(
+    (data: any, index: number) => ({
+      length: CARD_HEIGHT + 32,
+      offset: (CARD_HEIGHT + 32) * index,
+      index,
+    }),
+    []
+  );
+
   return (
     <SafeAreaView style={[styles.container]}>
       <AnimatedFlatList
@@ -81,27 +88,21 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
         bounces={false}
         data={monstersArr}
         extraData={monstersArr}
-        getItemLayout={(data: any, index: number) => ({
-          length: CARD_HEIGHT + 32,
-          offset: (CARD_HEIGHT + 32) * index,
-          index,
-        })}
-        onEndReachedThreshold={0.5}
+        scrollToOverflowEnabled
+        getItemLayout={getItemLayout}
+        maxToRenderPerBatch={12}
+        onEndReachedThreshold={3}
         onEndReached={async () => {
-          setIsFetching(true);
-          const result: ApolloQueryResult<ApolloMonsters> | undefined =
-            await fetchMore?.({
-              variables: { skip: monstersArr.length, sort: sortStyle },
-            });
+          const result: ApolloQueryResult<ApolloMonsters> = await fetchMore!({
+            variables: { skip: monstersArr.length, sort: sortStyle },
+          });
           !!result?.data.monsters.length &&
             setMonstersArr((prev) => {
               return [...prev, ...result.data.monsters];
             });
-          setIsFetching(false);
         }}
-        refreshing={isFetching}
+        refreshing={loading}
         onRefresh={async () => {
-          setIsFetching(true);
           const result: ApolloQueryResult<ApolloMonsters> | undefined =
             await refetch?.({
               skip: 0,
@@ -111,7 +112,6 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
             setMonstersArr(() => {
               return result.data.monsters;
             });
-          setIsFetching(false);
         }}
         renderItem={({ item, index }: { item: any; index: number }) => (
           <BestiaryListItem
@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
-    backgroundColor: "#15131a",
   },
   title: {
     fontSize: 20,

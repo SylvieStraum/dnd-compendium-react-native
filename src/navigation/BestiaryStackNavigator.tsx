@@ -4,9 +4,9 @@ import {
   StackNavigationOptions,
   StackNavigationProp,
 } from "@react-navigation/stack";
-import { BestiaryPage } from "../screens/Bestiary/BestiaryPage";
+import { BestiaryPage } from "../screens/Bestiary/BestiaryPage/BestiaryPage";
 import { BestiaryStackParamList } from "../types/nav";
-import { SingleMonsterPage } from "../screens/Bestiary/SingleMonsterPage";
+import { SingleMonsterPage } from "../screens/Bestiary/SingleMonsterPage/SingleMonsterPage";
 import { getHeaderTitle } from "@react-navigation/elements";
 import { ScreenProps } from "react-native-screens";
 import { Text, View } from "../components/Themed";
@@ -21,19 +21,7 @@ export const BestiaryStackNavigator: React.FC<unknown> = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        header: ({ navigation, route, options, back }) => {
-          const title = getHeaderTitle(options, route.name);
-          return (
-            <MyHeader
-              title={title}
-              route={route}
-              leftButton={
-                <BackButton onPress={navigation.goBack} render={!!back} />
-              }
-              back={back?.title}
-            />
-          );
-        },
+        headerShown: false,
       }}
     >
       <Stack.Screen name="BestiaryHome" component={BestiaryPage} />
@@ -64,10 +52,10 @@ const MyHeader = ({ leftButton, route, title, back }: myHeaderProps) => {
       }}
     >
       {leftButton}
-      <View style={{ width: "33%",  backgroundColor:'transparent' }}>
+      <View style={{ width: "33%", backgroundColor: "transparent" }}>
         <Text style={{ fontSize: 20, alignSelf: "center" }}>{moddedTitle}</Text>
       </View>
-      <View style={{ width: "33%",  backgroundColor:'transparent' }}></View>
+      <View style={{ width: "33%", backgroundColor: "transparent" }}></View>
     </SafeAreaView>
   );
 };

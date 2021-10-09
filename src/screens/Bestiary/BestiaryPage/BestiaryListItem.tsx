@@ -1,14 +1,8 @@
 import React, { useMemo } from "react";
-import {
-  Pressable,
-  Text,
-  Animated,
-  Dimensions,
-  StyleSheet,
-} from "react-native";
-import { SmallMonsterCall } from "../types";
-import { CARD_HEIGHT as DEFAULT_HEIGHT, Card } from "./Card";
-import { View, ViewProps } from "./Themed";
+import { Pressable, Animated, Dimensions, StyleSheet } from "react-native";
+import { SmallMonsterCall } from "../../../types";
+import { CARD_HEIGHT as DEFAULT_HEIGHT, Card } from "../../../components/Card";
+import { View, ViewProps, Text } from "../../../components/Themed";
 
 interface BestiaryListItemProps extends ViewProps {
   onPress: () => void;
@@ -21,15 +15,6 @@ const MARGIN = 16;
 const CARD_HEIGHT = DEFAULT_HEIGHT + MARGIN * 2;
 const { height: wHeight } = Dimensions.get("window");
 const height = wHeight - 64;
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: MARGIN,
-    alignSelf: "center",
-  },
-  text: {
-    color: "#FBFAF5",
-  },
-});
 
 export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
   onPress,
@@ -87,20 +72,16 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
         <Card
           style={{
             justifyContent: "space-around",
-            backgroundColor: "#2f2b3b",
             borderRadius: 8,
             paddingHorizontal: 12,
           }}
         >
           {data?.name && (
             <>
-              <Text style={styles.text}> {data?.name}</Text>
-              <Text style={styles.text}>
-                {data?.size} {data?.type}{" "}
-                {!!data?.subtype && ": " + data.subtype}
-              </Text>
-              <Text style={styles.text}>
-                CR: {data?.challenge_rating} - {data?.xp} exp
+              <Text style={styles.name}> {data?.name}</Text>
+              <Text style={styles.challenge}>
+                CR:{data.challenge_rating} | <Text style={styles.monsterType}>{data.size} {data.type}{" "}
+                {!!data?.subtype && `(${data.subtype})`}</Text>
               </Text>
             </>
           )}
@@ -109,3 +90,22 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
     </Animated.View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: MARGIN,
+    alignSelf: "center",
+  },
+
+  name: {
+    fontWeight: "bold",
+    fontSize:18
+  },
+  monsterType: {
+    fontStyle:'italic',
+    fontSize:13
+  },
+  challenge: {
+    fontSize:14
+  },
+});
