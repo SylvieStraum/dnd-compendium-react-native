@@ -21,7 +21,7 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
   return (
     <SafeBackGround style={[styles.container]}>
         <TransparentView style={{flexDirection:'row', width:'100%'}}>
-
+            
         </TransparentView>
    
     </SafeBackGround>

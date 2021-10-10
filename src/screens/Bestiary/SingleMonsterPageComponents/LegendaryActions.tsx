@@ -1,29 +1,31 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { MonsterLegendary_actions } from "../../../types";
-import { Text,  TransparentView } from "../../../components/Themed";
+import { BaseMonsterAction } from "../../../types";
+import { Text, TransparentView } from "../../../components/Themed";
 
 interface LegendaryActionsProps {
-  rawLegendaryActions?: MonsterLegendary_actions[];
+  legendaryActions?: BaseMonsterAction[];
+  legendaryDesc?: string;
 }
 export const LegendaryActions: React.FC<LegendaryActionsProps> = ({
-  rawLegendaryActions,
+  legendaryActions,
+  legendaryDesc,
 }) => {
-  const LegendaryActions = rawLegendaryActions?.map((item) => {
-    return (
-      <Text key={item.name} style={styles.textDesc}>
-        <Text style={styles.textLabel}>{item.name}:</Text> {item.desc}
-      </Text>
-    );
-  });
   return (
     <>
-      {!!rawLegendaryActions ? (
+      {!!legendaryActions ? (
         <>
-          < TransparentView style={[styles.section]}>
-            <Text style={styles.title}>Legendary Actions</Text>
-          </ TransparentView>
-          < TransparentView style={[styles.section]}>{LegendaryActions}</ TransparentView>
+          <TransparentView style={[styles.section]}>
+            <Text style={styles.subSectionTitle}>Legendary Actions</Text>
+          </TransparentView>
+          <Text>{legendaryDesc}</Text>
+          <TransparentView style={[styles.section]}>
+            {legendaryActions.map((item) => (
+              <Text key={item.name} style={styles.textDesc}>
+                <Text style={styles.textLabel}>{item.name}:</Text> {item.desc}
+              </Text>
+            ))}
+          </TransparentView>
         </>
       ) : (
         <></>
@@ -42,8 +44,13 @@ const styles = StyleSheet.create({
   textLabel: {
     fontWeight: "bold",
   },
-  title: {
-    fontSize: 28,
+  subSectionTitle: {
+    fontSize: 16,
     fontWeight: "bold",
+    width: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
   },
 });

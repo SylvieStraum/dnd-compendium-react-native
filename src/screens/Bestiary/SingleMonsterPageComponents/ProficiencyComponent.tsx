@@ -7,54 +7,54 @@ import {
 import { Text, TransparentView } from "../../../components/Themed";
 
 interface ProficiencyComponentProps {
-  proficiencies: MonsterProficiencies[];
-  rawImmune: string[];
-  rawResist: string[];
-  rawVuln: string[];
-  rawConditions: MonsterCondition_immunities[];
+  skills: {};
+  saves: {};
+  immunities: string;
+  resistances: string;
+  vulnerabilities: string;
+  conditionImmunities: string;
 }
 export const ProficiencyComponent: React.FC<ProficiencyComponentProps> = ({
-  proficiencies,
-  rawImmune,
-  rawResist,
-  rawVuln,
-  rawConditions,
+  skills,
+  saves,
+  immunities,
+  resistances,
+  vulnerabilities,
+  conditionImmunities,
 }) => {
-  const profArray = proficiencies.map((item) => {
-    if (item.proficiency.name.toLowerCase().includes("saving")) {
-      return {
-        saving: `${item.proficiency.name.split(": ")[1]} +${item.value}`,
-      };
-    } else {
-      return {
-        skill: `${item.proficiency.name.split(": ")[1]} +${item.value}`,
-      };
-    }
-  });
-  const readableStringMap = (arr: any[]) => {
-    return arr.map((item, index) => {
-      return `${item?.name ?? item}${arr.length > 2 ? ", " : ""}`;
-    });
-  };
-  const immunities = readableStringMap(rawImmune);
-  const resistances = readableStringMap(rawResist);
-  const vulnerabilites = readableStringMap(rawVuln);
-  const conditions = readableStringMap(rawConditions);
   return (
     <TransparentView style={[styles.section]}>
-      <Text>
-        Saving throws:{" "}
-        {profArray.map((item) => item.saving && `${item.saving}, `)}
-      </Text>
-      <Text>
-        Skills: {profArray.map((item) => item.skill && `${item.skill}, `)}
-      </Text>
-      {!!immunities.length && <Text>Damage Immunities: {immunities}</Text>}
-      {!!resistances.length && <Text>Damage Resistances: {resistances}</Text>}
-      {!!vulnerabilites.length && (
-        <Text>Damage Vulnerabilities: {vulnerabilites}</Text>
+      {!!saves && (
+        <Text>
+          <Text style={styles.textLabel}>Saving throws:</Text>{" "}
+          {Object.entries(saves).map((item, index, arr) => {
+            if (item[1] === null) {
+              return;
+            }
+            let mathOp = !!item[1] ? "+" : "";
+            return `${item[0]}: ${mathOp + item[1]}${" "}`;
+          })}
+        </Text>
       )}
-      {!!conditions.length && <Text>Condition Immunities: {conditions}</Text>}
+      {skills && (
+        <Text>
+          <Text style={styles.textLabel}>Skills:</Text>{" "}
+          {Object.entries(skills).map((item, index, arr) => {
+            let mathOp = !!item[1] ? "+" : "";
+            return `${item[0]}: ${mathOp+item[1]}${
+              index === arr.length - 1 ? "." : ", "
+            }`;
+          })}
+        </Text>
+      )}
+      {!!immunities && <Text><Text style={styles.textLabel}>Damage Immunities:</Text> {immunities}</Text>}
+      {!!resistances && <Text><Text style={styles.textLabel}>Damage Resistances:</Text> {resistances}</Text>}
+      {!!vulnerabilities && (
+        <Text><Text style={styles.textLabel}>Damage Vulnerabilities:</Text> {vulnerabilities}</Text>
+      )}
+      {!!conditionImmunities && (
+        <Text><Text style={styles.textLabel}>Condition Immunities:</Text> {conditionImmunities}</Text>
+      )}
     </TransparentView>
   );
 };

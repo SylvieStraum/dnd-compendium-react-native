@@ -1,5 +1,6 @@
 import React from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { DjangoMonster } from ".";
 
 export type RootStackParamList = {
   Main: undefined;
@@ -19,7 +20,7 @@ Settings:undefined;
 
 export type BestiaryStackParamList = {
   BestiaryHome: undefined;
-  IndividualMonsterPage: { name: string };
+  IndividualMonsterPage: { monster: DjangoMonster, name:string };
   FilterPage: undefined;
 };
 

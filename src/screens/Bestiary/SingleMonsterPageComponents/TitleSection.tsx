@@ -9,36 +9,33 @@ interface MonsterTitleProps extends ViewProps {
   type: string;
   subtype?: string;
   alignment: string;
+  source: string
 }
 export const TitleSection: React.FC<MonsterTitleProps> = ({
   size,
   type,
   subtype,
   alignment,
-  name
+  name,
+  source
 }) => {
   return (
     <TransparentView style={styles.section}>
       <Text style={styles.title}>{name}</Text>
       <Text>
-        {size} | {type} | {subtype && subtype+' |'} {alignment}
+        {size} | {type} | {subtype && subtype + " |"} {alignment}
       </Text>
+      <Text>{source}</Text>
     </TransparentView>
   );
 };
 
 const styles = StyleSheet.create({
-    section: {
-        paddingVertical: 8,
-      },
-      textDesc: {
-        padding: 6,
-      },
-      textLabel: {
-        fontWeight: "bold",
-      },
-      title: {
-        fontSize: 28,
-        fontWeight: "bold",
-      },
-})
+  section: {
+    paddingVertical: 8,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+  },
+});

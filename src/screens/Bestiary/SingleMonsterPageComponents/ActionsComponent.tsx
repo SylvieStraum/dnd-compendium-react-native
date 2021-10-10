@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { MonsterActions, MonsterReactions } from "../../../types";
+import { BaseMonsterAction } from "../../../types";
 import { Text,  TransparentView } from "../../../components/Themed";
 
+
 interface ActionsComponentProps {
-  actions: MonsterActions[];
-  reactions: MonsterReactions[];
+  actions: BaseMonsterAction[];
+  reactions: BaseMonsterAction[];
 }
 export const ActionsComponent: React.FC<ActionsComponentProps> = ({
   actions,

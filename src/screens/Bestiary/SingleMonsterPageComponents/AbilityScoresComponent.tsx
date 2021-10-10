@@ -44,7 +44,7 @@ export const AbilityScoresComponent: React.FC<AbilityScoresComponentProps> = ({
           >
             <Text style={styles.textLabel}>{item.stat}</Text>
             <Text>
-              {item.val}(+{mod})
+              {item.val}({!!mod ? '+'+mod:mod})
             </Text>
           </ TransparentView>
         );

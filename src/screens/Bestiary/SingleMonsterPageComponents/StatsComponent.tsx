@@ -7,31 +7,29 @@ interface StatsComponentProps {
   armorClass: number;
   hitPoints: number;
   hitDice: string;
-  speed: MonsterSpeed;
-  con: number;
-  findMod: (num: number) => number;
+  armorType:string;
+  speed: {};
 }
 export const StatsComponent: React.FC<StatsComponentProps> = ({
   armorClass,
+  armorType,
   hitPoints,
   hitDice,
   speed,
-  con,
-  findMod,
 }) => {
   return (
     <TransparentView style={styles.section}>
-      <Text>Armor Class: {armorClass}</Text>
+      <Text><Text style={styles.textLabel}>Armor Class:</Text> {armorClass}{armorType&&` (${armorType})`}</Text>
       <Text>
-        Hit Points: {hitPoints} ({hitDice} +{" "}
-        {parseInt(hitDice.split("d")[0]) * findMod(con)})
+      <Text style={styles.textLabel}>Hit Points:</Text> {hitPoints} ({hitDice})
       </Text>
       <Text>
-        Speed:{" "}
-        {Object.entries(speed).map((item) => {
-          if (item[1] && item[1] !== "MonsterSpeed") {
-            return `${item[0] + " " + item[1]}`;
+      <Text style={styles.textLabel}>Speed:</Text>{" "}
+        {Object.entries(speed).map((item, index, arr) => {
+          if (item[1]===true) {
+            return `${item[0]}, `;
           }
+          return `${item[0] + " " + item[1]}${index===arr.length-1 ? '.':', '}`;
         })}
       </Text>
     </TransparentView>
@@ -48,8 +46,13 @@ const styles = StyleSheet.create({
   textLabel: {
     fontWeight: "bold",
   },
-  title: {
-    fontSize: 28,
+  subSectionTitle: {
+    fontSize: 16,
     fontWeight: "bold",
+    width: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
   },
 });
