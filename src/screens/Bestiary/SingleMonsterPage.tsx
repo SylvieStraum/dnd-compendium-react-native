@@ -33,8 +33,6 @@ export const SingleMonsterPage: React.FC<SingleMonsterScreenProps> = ({
     return Math.floor((score - 10) / 2);
   };
 
-  console.log(monster)
-
   return (
     <SafeBackGround style={[styles.container]}>
       <ScrollView
@@ -84,12 +82,12 @@ export const SingleMonsterPage: React.FC<SingleMonsterScreenProps> = ({
           <ProficiencyComponent
             skills={monster.skills}
             saves={{
-              str: monster.strength_save,
-              dex: monster.dexterity_save,
-              con: monster.constitution_save,
-              int: monster.intelligence_save,
-              wis: monster.wisdom_save,
-              cha: monster.charisma_save,
+              str: monster.strength_save ?? abilityMod(monster.strength),
+              dex: monster.dexterity_save ?? abilityMod(monster.dexterity),
+              con: monster.constitution_save ?? abilityMod(monster.constitution),
+              int: monster.intelligence_save ?? abilityMod(monster.intelligence),
+              wis: monster.wisdom_save ?? abilityMod(monster.wisdom),
+              cha: monster.charisma_save ?? abilityMod(monster.charisma),
             }}
             immunities={monster.damage_immunities}
             resistances={monster.damage_resistances}

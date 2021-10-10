@@ -21,20 +21,17 @@ export const ProficiencyComponent: React.FC<ProficiencyComponentProps> = ({
 }) => {
   return (
     <TransparentView style={[styles.section]}>
-      {!!Object.values(saves).every((item) => item !== null) && (
+      {
         <NameAndDescText title="Saving Throws: ">
           <Text>
-            {" "}
-            {Object.entries(saves).map((item) => {
-              if (item[1] === null) {
-                return;
-              }
-              let mathOp = !!item[1] ? "+" : "";
-              return `${item[0]}: ${mathOp + item[1]}${" "}`;
+            {Object.entries(saves).map((item, index, arr) => {
+              let num:any = item[1]
+              let mathOp = num > 0 ? "+" : '';
+              return `${item[0]} ${mathOp + item[1]}${ index === arr.length - 1 ? "." : ", "}`;
             })}
           </Text>
         </NameAndDescText>
-      )}
+      }
       {!!Object.entries(skills).length && (
         <NameAndDescText title="Skills: ">
           {Object.entries(skills).map((item, index, arr) => {

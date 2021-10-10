@@ -33,7 +33,7 @@ export const AbilityScoresComponent: React.FC<AbilityScoresComponentProps> = ({
     <TransparentView
       style={[
         styles.section,
-        { flexDirection: "row", justifyContent: "space-between" },
+        { flexDirection: "row", justifyContent: "space-between", width:'90%', alignSelf:'center' },
       ]}
     >
       {statArray.map((item) => {
@@ -41,7 +41,7 @@ export const AbilityScoresComponent: React.FC<AbilityScoresComponentProps> = ({
         return (<TransparentView style={{flexDirection:'column'}}> 
             <NameAndDescText title={item.stat} align="column" style={{alignItems:'center'}}>
               {" "}
-              {item.val}({!!mod || mod===0 ? "+" + mod : mod})
+              {item.val}({mod>0 ? "+" + mod : mod})
             </NameAndDescText>
             </TransparentView>
         );
