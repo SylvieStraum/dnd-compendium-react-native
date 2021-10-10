@@ -2,7 +2,7 @@ const tintColorLight = '#484b6a';
 const tintColorDark = '#fff';
 
 export default {
-  light: {
+  dark: {
     primary:'#000',   
     card: '#484b6a',
     border: '#9090D9',
@@ -14,14 +14,14 @@ export default {
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorLight,
   },
-  dark: {
+  light: {
     primary:'#FBFAF5',   
     card: '#2f2b3b',
     border: '#f23269',
     notification: '',
     text: '#e9e8ea',
     background: '#161414',
-    backgroundColor:'#232121',
+    backgroundColor:'#2f2b3b',
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,

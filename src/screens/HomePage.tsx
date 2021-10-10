@@ -17,11 +17,11 @@ export const HomePage: Screen<Navigation> = ({ navigation }) => {
           navigation.navigate("Bestiary");
         }}
       >
-        <Image source={BestiaryImage} />
+        <Image source={BestiaryImage} style={{tintColor:theme.colors.tint}}/>
         <Text>Bestiary</Text>
       </DraggableHomeItem>
-      <DraggableHomeItem theme={theme} onPress={() => {}}>
-        <Image source={SpellOrb} />
+      <DraggableHomeItem theme={theme} onPress={() => console.log('notyet')}>
+        <Image source={SpellOrb} style={{tintColor:theme.colors.tint}}/>
         <Text>Spells</Text>
         <Text style={{fontSize:10}}>(TBD)</Text>
       </DraggableHomeItem>

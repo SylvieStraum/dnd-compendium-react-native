@@ -3,13 +3,9 @@ import {
   Animated,
   StyleSheet,
   PanResponder,
-  Text,
   Dimensions,
-  TouchableNativeFeedbackBase,
-  Pressable,
 } from "react-native";
 import {
-  TouchableHighlight,
   TouchableOpacity,
 } from "react-native-gesture-handler";
 import { Theme } from "../hooks/useTheme";
@@ -32,7 +28,7 @@ export const DraggableHomeItem: React.FC<DraggableHomeItemProps> = ({
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {useNativeDriver:true}),
+      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }]),
       onPanResponderRelease: () => {
         Animated.spring(pan, {
           toValue: { x: 0, y: 0 },
@@ -53,7 +49,6 @@ export const DraggableHomeItem: React.FC<DraggableHomeItemProps> = ({
       {...panResponder.panHandlers}
     >
       <TouchableOpacity
-        onPress={() => onPress()}
         style={[
           styles.container,
           { backgroundColor: theme.colors.backgroundColor },
