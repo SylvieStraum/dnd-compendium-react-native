@@ -1,29 +1,30 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-  StyleSheet,
-  FlatList,
-  Animated,
-} from "react-native";
-
+import React from "react";
+import { Image, StyleSheet } from "react-native";
 import { Navigation, Screen } from "../types";
-import { useIsFocused } from "@react-navigation/core";
-import { SafeBackGround, TransparentView } from "../components/Themed";
+import { SafeBackGround, Text } from "../components/Themed";
+import { useTheme } from "../hooks/useTheme";
+import { DraggableHomeItem } from "../components/DraggableHomeItem";
+import { BestiaryImage, SpellOrb } from "../../assets/images";
 
-
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
-
-export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
-  const isFocused = useIsFocused();
-
-
-
+export const HomePage: Screen<Navigation> = ({ navigation }) => {
+  const theme = useTheme();
 
   return (
     <SafeBackGround style={[styles.container]}>
-        <TransparentView style={{flexDirection:'row', width:'100%'}}>
-            
-        </TransparentView>
-   
+      <DraggableHomeItem
+        theme={theme}
+        onPress={() => {
+          navigation.navigate("Bestiary");
+        }}
+      >
+        <Image source={BestiaryImage} />
+        <Text>Bestiary</Text>
+      </DraggableHomeItem>
+      <DraggableHomeItem theme={theme} onPress={() => {}}>
+        <Image source={SpellOrb} />
+        <Text>Spells</Text>
+        <Text style={{fontSize:10}}>(TBD)</Text>
+      </DraggableHomeItem>
     </SafeBackGround>
   );
 };
@@ -32,9 +33,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     height: "100%",
-    flexDirection:'column'
+    flexDirection: "column",
   },
   title: {
     fontSize: 20,

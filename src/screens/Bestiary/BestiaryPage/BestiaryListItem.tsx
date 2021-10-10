@@ -9,6 +9,7 @@ import {
 } from "../../../components/Themed";
 import { useTheme } from "../../../hooks/useTheme";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Divider } from "../../../components/Divider";
 
 interface BestiaryListItemProps extends ViewProps {
   onPress: () => void;
@@ -20,7 +21,7 @@ interface BestiaryListItemProps extends ViewProps {
 const MARGIN = 16;
 const CARD_HEIGHT = DEFAULT_HEIGHT + MARGIN * 2;
 const { height: wHeight } = Dimensions.get("window");
-const height = wHeight - 64;
+const height = wHeight - 144;
 
 export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
   onPress,
@@ -41,7 +42,7 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
       Animated.add(
         y,
         y.interpolate({
-          inputRange: [0, 0.00001 + index * CARD_HEIGHT],
+          inputRange: [0, index * CARD_HEIGHT],
           outputRange: [0, -index * CARD_HEIGHT],
           extrapolateRight: "clamp",
         })
@@ -66,13 +67,13 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
     return position.interpolate({
       inputRange: [isDisappearing, isTop, isBottom, isAppearing],
       outputRange: [0.1, 1, 1, 0.1],
-      extrapolate: "clamp",
+      extrapolate: 'clamp',
     });
   }, [y]);
   return (
     <Animated.View
       style={[
-        { opacity: opacity, transform: [{ translateY }, { scale }] },
+        { opacity: opacity, transform: [{ translateY }, { scale }]},
         styles.container,
       ]}
     >
@@ -89,7 +90,6 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
           {data?.name && (
             <>
               <Text style={styles.name}>{data?.name}</Text>
-
               <TransparentView
                 style={[
                   {

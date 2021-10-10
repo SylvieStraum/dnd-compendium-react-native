@@ -13,7 +13,6 @@ import { useTheme } from "../hooks/useTheme";
 const RootStack = createStackNavigator<RootStackParamList>();
 
 export const Navigation = () => {
-  const theme = useTheme()
   const routeNameRef = React.useRef<string>();
   const navigationRef = React.useRef<NavigationContainerRef<any> | null>(null);
 
@@ -31,8 +30,8 @@ export const Navigation = () => {
       }
       onStateChange={handleNavigationStateChange}
     >
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        {/* <RootStack.Screen name="Main" component={MainStackNavigator} /> */}
+      <RootStack.Navigator  screenOptions={{headerShown:false}}>
+        <RootStack.Screen name="Main" component={MainStackNavigator} />
         <RootStack.Screen name="Bestiary" component={BestiaryStackNavigator} />
         {/* <RootStack.Screen name="Profile" component={MainStackNavigator} /> */}
       </RootStack.Navigator>

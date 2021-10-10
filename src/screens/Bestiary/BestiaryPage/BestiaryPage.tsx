@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, FlatList, Animated } from "react-native";
+import { StyleSheet, FlatList, Animated, Modal } from "react-native";
 import axios from "axios";
 
 import {
@@ -10,8 +10,11 @@ import { Navigation, Screen } from "../../../types";
 import { BestiaryListItem } from "./BestiaryListItem";
 import { useIsFocused } from "@react-navigation/core";
 import { CARD_HEIGHT } from "../../../components/Card";
-import { SafeBackGround, TransparentView } from "../../../components/Themed";
+import { SafeBackGround } from "../../../components/Themed";
 import { useTheme } from "../../../hooks/useTheme";
+import { Divider } from "../../../components/Divider";
+import { useModal } from "../../../hooks/useModal";
+import { MyModal } from "../../../components/MyModal";
 
 interface DjangoCall {
   data: {
@@ -27,6 +30,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
   const isFocused = useIsFocused();
   const theme = useTheme();
+  const modal = useModal()
 
   const [loading, setLoading] = useState(false);
   const [monstersArr, setMonstersArr] = useState<DjangoMonster[]>([]);
@@ -65,18 +69,10 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
     }),
     []
   );
-  const seperatorElement = () => (
-    <TransparentView
-      style={[
-        {
-          borderBottomColor: theme.colors.border,
-        },
-        styles.separator,
-      ]}
-    />
-  );
 
   return (
+    <>
+    <MyModal visible={modal.isVisible} setVisibility={modal.toggle} />
     <SafeBackGround style={[styles.container]}>
       <AnimatedFlatList
         overScrollMode="always"
@@ -90,7 +86,7 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
         getItemLayout={getItemLayout}
         maxToRenderPerBatch={21}
         onEndReachedThreshold={3}
-        ItemSeparatorComponent={seperatorElement}
+        ItemSeparatorComponent={Divider}
         onEndReached={async () => {
           await djangoAsyncCall(nextUrl);
         }}
@@ -119,6 +115,7 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
         {...{ onScroll }}
       />
     </SafeBackGround>
+    </>
   );
 };
 

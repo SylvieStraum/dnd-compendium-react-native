@@ -10,21 +10,21 @@ export type RootStackParamList = {
 };
 
 export type MainStackParamList = {
-  Launch:undefined;
-  Home:undefined;
-}
+  Home: undefined;
+};
 
 export type ProfileStackParamList = {
-Settings:undefined;
+  Settings: undefined;
 };
 
 export type BestiaryStackParamList = {
   BestiaryHome: undefined;
-  IndividualMonsterPage: { monster: DjangoMonster, name:string };
+  IndividualMonsterPage: { monster: DjangoMonster; name: string };
   FilterPage: undefined;
 };
 
 export type OverallStackParamList = RootStackParamList &
+  MainStackParamList &
   ProfileStackParamList &
   BestiaryStackParamList;
 
