@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
+import { Divider } from "../../../components/Divider";
 import { Text, TransparentView } from "../../../components/Themed";
 import { MonsterSpecial_abilities } from "../../../types";
 import { NameAndDescText } from "./Text/NameAndDesc";
@@ -18,7 +19,6 @@ export const SpecialAbilitiesComponent: React.FC<SpecialAbilitiesComponentProps>
       <>
         {!!rawSpecialAbilities ? (
           <>
-            <SubSectionTitle title="Abilities" />
             <TransparentView style={[styles.section]}>
               {rawSpecialAbilities.map((item) => {
                 return (
@@ -28,6 +28,7 @@ export const SpecialAbilitiesComponent: React.FC<SpecialAbilitiesComponentProps>
                 );
               })}
             </TransparentView>
+            <Divider/>
           </>
         ) : (
           <></>

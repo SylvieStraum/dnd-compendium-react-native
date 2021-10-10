@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { MonsterSpeed } from "../../../types";
 import { Text, TransparentView } from "../../../components/Themed";
 import { NameAndDescText } from "./Text/NameAndDesc";
+import { Divider } from "../../../components/Divider";
 
 interface StatsComponentProps {
   armorClass: number;
@@ -22,7 +23,7 @@ export const StatsComponent: React.FC<StatsComponentProps> = ({
   languages,
   senses,
 }) => {
-  return (
+  return (<>
     <TransparentView style={styles.section}>
       <NameAndDescText title="Armor Class: ">
         {armorClass}
@@ -47,8 +48,9 @@ export const StatsComponent: React.FC<StatsComponentProps> = ({
       <NameAndDescText title="Senses: ">
       {senses}
       </NameAndDescText>
-   
+      <Divider/>
     </TransparentView>
+    </>
   );
 };
 

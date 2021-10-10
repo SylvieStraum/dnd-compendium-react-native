@@ -94,6 +94,9 @@ export const SingleMonsterPage: React.FC<SingleMonsterScreenProps> = ({
             vulnerabilities={monster.damage_vulnerabilities}
             conditionImmunities={monster.condition_immunities}
           />
+          <SpecialAbilitiesComponent
+            rawSpecialAbilities={monster.special_abilities}
+          />
           <ActionsComponent
             actions={monster.actions}
             reactions={monster.reactions}
@@ -101,9 +104,6 @@ export const SingleMonsterPage: React.FC<SingleMonsterScreenProps> = ({
           <LegendaryActions
             legendaryActions={monster.legendary_actions}
             legendaryDesc={monster.legendary_desc}
-          />
-          <SpecialAbilitiesComponent
-            rawSpecialAbilities={monster.special_abilities}
           />
         </TransparentView>
       </ScrollView>

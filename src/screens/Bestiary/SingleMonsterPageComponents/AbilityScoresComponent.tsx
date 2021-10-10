@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
+import { Divider } from "../../../components/Divider";
 import { Text, TransparentView } from "../../../components/Themed";
 import { NameAndDescText } from "./Text/NameAndDesc";
 interface AbilityScoresComponentProps {
@@ -29,7 +30,7 @@ export const AbilityScoresComponent: React.FC<AbilityScoresComponentProps> = ({
     { stat: "CHA", val: cha },
   ];
 
-  return (
+  return (<>
     <TransparentView
       style={[
         styles.section,
@@ -38,7 +39,7 @@ export const AbilityScoresComponent: React.FC<AbilityScoresComponentProps> = ({
     >
       {statArray.map((item) => {
         const mod = findMod(item.val);
-        return (<TransparentView style={{flexDirection:'column'}}> 
+        return (<TransparentView style={{flexDirection:'column'}} key={item.stat}> 
             <NameAndDescText title={item.stat} align="column" style={{alignItems:'center'}}>
               {" "}
               {item.val}({mod>0 ? "+" + mod : mod})
@@ -46,7 +47,10 @@ export const AbilityScoresComponent: React.FC<AbilityScoresComponentProps> = ({
             </TransparentView>
         );
       })}
+      
     </TransparentView>
+    <Divider/>
+    </>
   );
 };
 

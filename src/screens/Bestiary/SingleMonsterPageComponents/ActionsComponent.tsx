@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { BaseMonsterAction } from "../../../types";
 import { Text, TransparentView } from "../../../components/Themed";
 import { NameAndDescText } from "./Text/NameAndDesc";
+import { Divider } from "../../../components/Divider";
 
 interface ActionsComponentProps {
   actions: BaseMonsterAction[];

@@ -4,6 +4,7 @@ import { BaseMonsterAction } from "../../../types";
 import { Text, TransparentView } from "../../../components/Themed";
 import { NameAndDescText } from "./Text/NameAndDesc";
 import { SubSectionTitle } from "./Text/SubSectionTitle";
+import { Divider } from "../../../components/Divider";
 
 interface LegendaryActionsProps {
   legendaryActions?: BaseMonsterAction[];
@@ -26,6 +27,7 @@ export const LegendaryActions: React.FC<LegendaryActionsProps> = ({
                </NameAndDescText>
             ))}
           </TransparentView>
+          <Divider/>
         </>
       ) : (
         <></>

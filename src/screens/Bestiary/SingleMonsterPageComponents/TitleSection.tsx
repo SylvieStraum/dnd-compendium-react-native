@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
+import { Divider } from "../../../components/Divider";
 import { Text, TransparentView } from "../../../components/Themed";
 import { ViewProps } from "../../../components/Themed";
 
@@ -28,6 +29,7 @@ export const TitleSection: React.FC<MonsterTitleProps> = ({
         {size} | {type} | {subtype && subtype + " |"} {alignment}
       </Text>
       <Text>{source} ({slug})</Text>
+      <Divider/>
     </TransparentView>
   );
 };
