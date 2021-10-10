@@ -3,8 +3,6 @@ import {
   StyleSheet,
   FlatList,
   Animated,
-  Button,
-  Dimensions,
 } from "react-native";
 
 import { gql, useLazyQuery, ApolloQueryResult, useQuery } from "@apollo/client";
@@ -13,10 +11,10 @@ import {
   SortFindManyMonsterInput,
 } from "../../../types/monsterTypes";
 import { Navigation, Screen } from "../../../types";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { BestiaryListItem } from "./BestiaryListItem";
 import { useIsFocused } from "@react-navigation/core";
 import { CARD_HEIGHT } from "../../../components/Card";
+import { SafeBackGround } from "../../../components/Themed";
 
 interface ApolloMonsters {
   monsters: SmallMonsterCall[];
@@ -72,15 +70,15 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
 
   const getItemLayout = useCallback(
     (data: any, index: number) => ({
-      length: CARD_HEIGHT + 32,
-      offset: (CARD_HEIGHT + 32) * index,
+      length: CARD_HEIGHT + 0,
+      offset: (CARD_HEIGHT + 0) * index,
       index,
     }),
     []
   );
 
   return (
-    <SafeAreaView style={[styles.container]}>
+    <SafeBackGround style={[styles.container]}>
       <AnimatedFlatList
         overScrollMode="always"
         scrollEventThrottle={16}
@@ -90,7 +88,7 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
         extraData={monstersArr}
         scrollToOverflowEnabled
         getItemLayout={getItemLayout}
-        maxToRenderPerBatch={12}
+        maxToRenderPerBatch={21}
         onEndReachedThreshold={3}
         onEndReached={async () => {
           const result: ApolloQueryResult<ApolloMonsters> = await fetchMore!({
@@ -130,7 +128,7 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
         }}
         {...{ onScroll }}
       />
-    </SafeAreaView>
+    </SafeBackGround>
   );
 };
 

@@ -6,6 +6,7 @@
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
 import { Text as DefaultText, View as DefaultView, Appearance } from 'react-native';
+import { SafeAreaView, SafeAreaViewProps } from 'react-native-safe-area-context';
 import { useThemeColor } from '../hooks/useThemeColor';
 
 type ThemeProps = {
@@ -15,6 +16,7 @@ type ThemeProps = {
 
 export type TextProps = ThemeProps & DefaultText['props'];
 export type ViewProps = ThemeProps & DefaultView['props'];
+export type SafeBackgroundProps = ThemeProps & SafeAreaViewProps
 
 export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
@@ -28,4 +30,24 @@ export function View(props: ViewProps) {
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'backgroundColor')
   
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+export function TransparentView(props: ViewProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  
+  return <DefaultView style={[{ backgroundColor:'transparent' }, style]} {...otherProps} />;
+}
+
+export function CardView(props: ViewProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'card')
+  
+  return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+export function SafeBackGround(props: SafeBackgroundProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
+  
+  return <SafeAreaView style={[{ backgroundColor }, style]} {...otherProps} />;
 }

@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet} from "react-native";
+import { Text, TransparentView } from "../../../components/Themed";
 import { MonsterSpecial_abilities } from "../../../types";
 
 interface SpecialAbilitiesComponentProps {
@@ -8,15 +9,15 @@ interface SpecialAbilitiesComponentProps {
 export const SpecialAbilitiesComponent: React.FC<SpecialAbilitiesComponentProps> =
   ({ rawSpecialAbilities }) => {
     return (<>
-    { !!rawSpecialAbilities ? <><View style={[styles.section]}>
+    { !!rawSpecialAbilities ? <><TransparentView style={[styles.section]}>
         {rawSpecialAbilities.map((item) => {
           return (
-            <Text>
+            <Text key={item.name} >
               <Text style={styles.textLabel}>{item.name}{item.name === 'Legendary Resistance' && ' (3/day)'}:</Text> {item.desc}
             </Text>
           );
         })}
-      </View></>
+      </TransparentView></>
       :
       <></>}
       </>

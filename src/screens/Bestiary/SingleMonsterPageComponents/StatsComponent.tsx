@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import { MonsterSpeed } from "../../../types";
+import { Text, TransparentView } from "../../../components/Themed";
 
 interface StatsComponentProps {
   armorClass: number;
@@ -19,7 +20,7 @@ export const StatsComponent: React.FC<StatsComponentProps> = ({
   findMod,
 }) => {
   return (
-    <View style={styles.section}>
+    <TransparentView style={styles.section}>
       <Text>Armor Class: {armorClass}</Text>
       <Text>
         Hit Points: {hitPoints} ({hitDice} +{" "}
@@ -33,7 +34,7 @@ export const StatsComponent: React.FC<StatsComponentProps> = ({
           }
         })}
       </Text>
-    </View>
+    </TransparentView>
   );
 };
 

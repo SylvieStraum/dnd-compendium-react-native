@@ -1,17 +1,18 @@
 import React from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
+import { SafeBackGround, Text, TransparentView, View } from "../../components/Themed";
 
 import { gql, useQuery } from "@apollo/client";
-import { Monster } from "../../../types/monsterTypes";
-import { Navigation, Screen } from "../../../types";
+import { Monster } from "../../types/monsterTypes";
+import { Navigation, Screen } from "../../types";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TitleSection } from "./TitleSection";
-import {StatsComponent} from './StatsComponent'
-import { AbilityScoresComponent } from "./AbilityScoresComponent";
-import { ProficiencyComponent } from "./ProficiencyComponent";
-import { SpecialAbilitiesComponent } from "./SpecialAbilitiesComponent";
-import { ActionsComponent } from "./ActionsComponent";
-import { LegendaryActions } from "./LegendaryActions";
+import { TitleSection } from "./SingleMonsterPageComponents/TitleSection";
+import { StatsComponent } from "./SingleMonsterPageComponents/StatsComponent";
+import { AbilityScoresComponent } from "./SingleMonsterPageComponents/AbilityScoresComponent";
+import { ProficiencyComponent } from "./SingleMonsterPageComponents/ProficiencyComponent";
+import { SpecialAbilitiesComponent } from "./SingleMonsterPageComponents/SpecialAbilitiesComponent";
+import { ActionsComponent } from "./SingleMonsterPageComponents/ActionsComponent";
+import { LegendaryActions } from "./SingleMonsterPageComponents/LegendaryActions";
 
 const MONSTER_BY_NAME = gql`
   query GetMonster($name: String!) {
@@ -130,10 +131,19 @@ export const SingleMonsterPage: React.FC<SingleMonsterScreenProps> = ({
   const abilityMod = (score: number) => {
     return Math.floor((score - 10) / 2);
   };
+  if(!monster){
+    return <SafeBackGround>
+      
+    </SafeBackGround>
+  }
 
   return (
-    <SafeAreaView style={[styles.container]}>
-      <ScrollView>
+    <SafeBackGround style={[styles.container]}>
+      <ScrollView 
+      overScrollMode='always'
+      scrollToOverflowEnabled
+      style={{ backgroundColor: "transparent", padding:12, }}>
+        <TransparentView style={{paddingBottom:40}}>
         <TitleSection
           name={monster.name}
           size={monster.size}
@@ -141,36 +151,41 @@ export const SingleMonsterPage: React.FC<SingleMonsterScreenProps> = ({
           subtype={monster.subtype}
           alignment={monster.alignment}
         />
-       <StatsComponent
-       armorClass={monster.armor_class}
-       hitDice={monster.hit_dice}
-       hitPoints={monster.hit_points}
-       findMod={abilityMod}
-       con={monster.constitution}
-       speed={monster.speed}
-       />
-       <AbilityScoresComponent 
-       str={monster.strength}
-       dex={monster.dexterity}
-       con={monster.constitution}
-       int={monster.intelligence}
-       wis={monster.wisdom}
-       cha={monster.charisma}
-       findMod={abilityMod}
-       />
-        <ProficiencyComponent 
-        proficiencies={monster.proficiencies}
-        rawImmune={monster.damage_immunities}
-        rawResist={monster.damage_resistances}
-        rawVuln={monster.damage_vulnerabilities}
-        rawConditions={monster.condition_immunities}
+        <StatsComponent
+          armorClass={monster.armor_class}
+          hitDice={monster.hit_dice}
+          hitPoints={monster.hit_points}
+          findMod={abilityMod}
+          con={monster.constitution}
+          speed={monster.speed}
         />
-       
-        <SpecialAbilitiesComponent  rawSpecialAbilities={monster.special_abilities}/>
-        <ActionsComponent actions={monster.actions} reactions={monster.reactions}/>
-        <LegendaryActions rawLegendaryActions={monster.legendary_actions}/>
+        <AbilityScoresComponent
+          str={monster.strength}
+          dex={monster.dexterity}
+          con={monster.constitution}
+          int={monster.intelligence}
+          wis={monster.wisdom}
+          cha={monster.charisma}
+          findMod={abilityMod}
+        />
+        <ProficiencyComponent
+          proficiencies={monster.proficiencies}
+          rawImmune={monster.damage_immunities}
+          rawResist={monster.damage_resistances}
+          rawVuln={monster.damage_vulnerabilities}
+          rawConditions={monster.condition_immunities}
+        />
+        <SpecialAbilitiesComponent
+          rawSpecialAbilities={monster.special_abilities}
+        />
+        <ActionsComponent
+          actions={monster.actions}
+          reactions={monster.reactions}
+        />
+        <LegendaryActions rawLegendaryActions={monster.legendary_actions} />
+        </TransparentView>
       </ScrollView>
-    </SafeAreaView>
+    </SafeBackGround>
   );
 };
 
@@ -179,7 +194,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     width: "100%",
-    padding: 16,
   },
   section: {
     paddingVertical: 8,

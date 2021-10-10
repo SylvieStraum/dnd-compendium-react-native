@@ -3,7 +3,7 @@ import {
   Dimensions,
   StyleSheet,
 } from "react-native";
-import { View, ViewProps } from "./Themed";
+import { CardView, ViewProps } from "./Themed";
 
 const { width } = Dimensions.get("window");
 const ratio = 80 / 362;
@@ -19,5 +19,5 @@ const styles = StyleSheet.create({
 interface CardProps extends ViewProps {}
 
 export const Card = ({ children, style }: CardProps) => {
-  return <View style={[styles.card, style]}>{children}</View>;
+  return <CardView style={[styles.card, style]}>{children}</CardView>;
 };

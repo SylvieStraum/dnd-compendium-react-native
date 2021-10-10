@@ -1,8 +1,9 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { Pressable, Animated, Dimensions, StyleSheet } from "react-native";
 import { SmallMonsterCall } from "../../../types";
 import { CARD_HEIGHT as DEFAULT_HEIGHT, Card } from "../../../components/Card";
 import { View, ViewProps, Text } from "../../../components/Themed";
+import { useTheme } from "../../../hooks/useTheme";
 
 interface BestiaryListItemProps extends ViewProps {
   onPress: () => void;
@@ -11,8 +12,8 @@ interface BestiaryListItemProps extends ViewProps {
   index: number;
 }
 
-const MARGIN = 16;
-const CARD_HEIGHT = DEFAULT_HEIGHT + MARGIN * 2;
+
+const CARD_HEIGHT = DEFAULT_HEIGHT 
 const { height: wHeight } = Dimensions.get("window");
 const height = wHeight - 64;
 
@@ -22,6 +23,8 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
   data,
   index,
 }) => {
+  const theme = useTheme()
+
   const position = Animated.subtract(index * CARD_HEIGHT, y);
   const isDisappearing = -CARD_HEIGHT;
   const isTop = 0;
@@ -71,9 +74,15 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
       <Pressable onPress={onPress}>
         <Card
           style={{
-            justifyContent: "space-around",
+            justifyContent: "space-evenly",
             borderRadius: 8,
             paddingHorizontal: 12,
+            backgroundColor:'transparent',
+            borderColor:theme.colors.border,
+            borderBottomWidth:1,
+            borderBottomRightRadius:40,
+            borderBottomLeftRadius:40,
+
           }}
         >
           {data?.name && (
@@ -93,7 +102,7 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: MARGIN,
+    marginVertical: 0,
     alignSelf: "center",
   },
 

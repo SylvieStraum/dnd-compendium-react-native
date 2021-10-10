@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import {
   MonsterCondition_immunities,
   MonsterProficiencies,
 } from "../../../types";
+import { Text, TransparentView } from "../../../components/Themed";
 
 interface ProficiencyComponentProps {
   proficiencies: MonsterProficiencies[];
@@ -40,7 +41,7 @@ export const ProficiencyComponent: React.FC<ProficiencyComponentProps> = ({
   const vulnerabilites = readableStringMap(rawVuln);
   const conditions = readableStringMap(rawConditions);
   return (
-    <View style={[styles.section]}>
+    <TransparentView style={[styles.section]}>
       <Text>
         Saving throws:{" "}
         {profArray.map((item) => item.saving && `${item.saving}, `)}
@@ -54,7 +55,7 @@ export const ProficiencyComponent: React.FC<ProficiencyComponentProps> = ({
         <Text>Damage Vulnerabilities: {vulnerabilites}</Text>
       )}
       {!!conditions.length && <Text>Condition Immunities: {conditions}</Text>}
-    </View>
+    </TransparentView>
   );
 };
 

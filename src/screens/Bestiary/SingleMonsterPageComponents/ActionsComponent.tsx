@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import { MonsterActions, MonsterReactions } from "../../../types";
+import { Text,  TransparentView } from "../../../components/Themed";
 
 interface ActionsComponentProps {
   actions: MonsterActions[];
@@ -21,18 +22,18 @@ export const ActionsComponent: React.FC<ActionsComponentProps> = ({
     <>
       {!!actions && (
         <>
-          <View style={[styles.section]}>
+          < TransparentView style={[styles.section]}>
             <Text style={styles.subSectionTitle}>Actions</Text>
-          </View>
-          <View style={[styles.section]}>{displayActionType(actions)}</View>
+          </ TransparentView>
+          < TransparentView style={[styles.section]}>{displayActionType(actions)}</ TransparentView>
         </>
       )}
       {
        !!reactions && <>
-          <View style={[styles.section]}>
+          < TransparentView style={[styles.section]}>
             <Text style={styles.subSectionTitle}>Reactions</Text>
-          </View>
-          <View style={[styles.section]}>{displayActionType(reactions)}</View>
+          </ TransparentView>
+          < TransparentView style={[styles.section]}>{displayActionType(reactions)}</ TransparentView>
         </>
       }
     </>

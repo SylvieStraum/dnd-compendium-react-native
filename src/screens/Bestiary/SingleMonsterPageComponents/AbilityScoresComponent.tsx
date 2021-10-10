@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
-
+import { StyleSheet } from "react-native";
+import { Text,  TransparentView } from "../../../components/Themed";
 interface AbilityScoresComponentProps {
   str: number;
   dex: number;
@@ -29,7 +29,7 @@ export const AbilityScoresComponent: React.FC<AbilityScoresComponentProps> = ({
   ];
 
   return (
-    <View
+    < TransparentView
       style={[
         styles.section,
         { flexDirection: "row", justifyContent: "space-between" },
@@ -38,7 +38,7 @@ export const AbilityScoresComponent: React.FC<AbilityScoresComponentProps> = ({
       {statArray.map((item) => {
         const mod = findMod(item.val);
         return (
-          <View
+          < TransparentView
             key={item.stat}
             style={{ flexDirection: "column", alignItems: "center" }}
           >
@@ -46,10 +46,10 @@ export const AbilityScoresComponent: React.FC<AbilityScoresComponentProps> = ({
             <Text>
               {item.val}(+{mod})
             </Text>
-          </View>
+          </ TransparentView>
         );
       })}
-    </View>
+    </ TransparentView>
   );
 };
 

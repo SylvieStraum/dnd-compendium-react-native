@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import { MonsterLegendary_actions } from "../../../types";
+import { Text,  TransparentView } from "../../../components/Themed";
 
 interface LegendaryActionsProps {
   rawLegendaryActions?: MonsterLegendary_actions[];
@@ -19,10 +20,10 @@ export const LegendaryActions: React.FC<LegendaryActionsProps> = ({
     <>
       {!!rawLegendaryActions ? (
         <>
-          <View style={[styles.section]}>
+          < TransparentView style={[styles.section]}>
             <Text style={styles.title}>Legendary Actions</Text>
-          </View>
-          <View style={[styles.section]}>{LegendaryActions}</View>
+          </ TransparentView>
+          < TransparentView style={[styles.section]}>{LegendaryActions}</ TransparentView>
         </>
       ) : (
         <></>

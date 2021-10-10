@@ -6,7 +6,7 @@ import {
 } from "@react-navigation/stack";
 import { BestiaryPage } from "../screens/Bestiary/BestiaryPage/BestiaryPage";
 import { BestiaryStackParamList } from "../types/nav";
-import { SingleMonsterPage } from "../screens/Bestiary/SingleMonsterPage/SingleMonsterPage";
+import { SingleMonsterPage } from "../screens/Bestiary/SingleMonsterPage";
 import { getHeaderTitle } from "@react-navigation/elements";
 import { ScreenProps } from "react-native-screens";
 import { Text, View } from "../components/Themed";

@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text} from "react-native";
-
+import { StyleSheet } from "react-native";
+import { Text, TransparentView } from "../../../components/Themed";
 import { ViewProps } from "../../../components/Themed";
 
 interface MonsterTitleProps extends ViewProps {
@@ -18,12 +18,12 @@ export const TitleSection: React.FC<MonsterTitleProps> = ({
   name
 }) => {
   return (
-    <View style={styles.section}>
+    <TransparentView style={styles.section}>
       <Text style={styles.title}>{name}</Text>
       <Text>
         {size} | {type} | {subtype && subtype+' |'} {alignment}
       </Text>
-    </View>
+    </TransparentView>
   );
 };
 
