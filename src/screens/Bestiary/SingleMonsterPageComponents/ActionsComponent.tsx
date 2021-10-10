@@ -1,11 +1,13 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { MonsterActions, MonsterReactions } from "../../../types";
-import { Text,  TransparentView } from "../../../components/Themed";
+import { BaseMonsterAction } from "../../../types";
+import { Text, TransparentView } from "../../../components/Themed";
+import { NameAndDescText } from "./Text/NameAndDesc";
+import { Divider } from "../../../components/Divider";
 
 interface ActionsComponentProps {
-  actions: MonsterActions[];
-  reactions: MonsterReactions[];
+  actions: BaseMonsterAction[];
+  reactions: BaseMonsterAction[];
 }
 export const ActionsComponent: React.FC<ActionsComponentProps> = ({
   actions,
@@ -13,29 +15,33 @@ export const ActionsComponent: React.FC<ActionsComponentProps> = ({
 }) => {
   const displayActionType = (arr: any[]) => {
     return arr.map((item) => (
-      <Text key={item.name} style={styles.textDesc}>
-        <Text style={styles.textLabel}>{item.name}:</Text> {item.desc}
-      </Text>
+      <NameAndDescText key={item.name} title={item.name+': '} >
+        {item.desc}
+      </NameAndDescText>
     ));
   };
   return (
     <>
       {!!actions && (
         <>
-          < TransparentView style={[styles.section]}>
+          <TransparentView style={[styles.section]}>
             <Text style={styles.subSectionTitle}>Actions</Text>
-          </ TransparentView>
-          < TransparentView style={[styles.section]}>{displayActionType(actions)}</ TransparentView>
+          </TransparentView>
+          <TransparentView style={[styles.section]}>
+            {displayActionType(actions)}
+          </TransparentView>
         </>
       )}
-      {
-       !!reactions && <>
-          < TransparentView style={[styles.section]}>
+      {!!reactions && (
+        <>
+          <TransparentView style={[styles.section]}>
             <Text style={styles.subSectionTitle}>Reactions</Text>
-          </ TransparentView>
-          < TransparentView style={[styles.section]}>{displayActionType(reactions)}</ TransparentView>
+          </TransparentView>
+          <TransparentView style={[styles.section]}>
+            {displayActionType(reactions)}
+          </TransparentView>
         </>
-      }
+      )}
     </>
   );
 };
@@ -44,19 +50,13 @@ const styles = StyleSheet.create({
   section: {
     paddingVertical: 8,
   },
-  textDesc: {
-    padding: 6,
-  },
-  textLabel: {
-    fontWeight: "bold",
-  },
   subSectionTitle: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold",
-    width:'80%',
-    alignItems:'center',
-    justifyContent:'center',
-    borderBottomColor:'grey',
-    borderBottomWidth:1
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
   },
 });

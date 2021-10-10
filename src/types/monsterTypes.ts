@@ -182,3 +182,180 @@ export type SortFindManyMonsterInput =
   | "WISDOM_DESC"
   | "XP_ASC"
   | "XP_DESC";
+
+export type BaseMonsterAction = {
+  attack_bonus?: number;
+  damage?: string;
+  name: string;
+  desc: string;
+};
+
+export type DjangoMonster = {
+  actions: BaseMonsterAction[];
+  alignment: string;
+  armor_class: number;
+  armor_desc: string;
+  challenge_rating: number;
+  charisma: number;
+  charisma_save: number;
+  condition_immunities: string;
+  constitution: number;
+  constitution_save: number;
+  damage_immunities: string;
+  damage_resistances: string;
+  damage_vulnerabilities: string;
+  dexterity: number;
+  dexterity_save: number;
+  document__license_url: string;
+  document__slug: string;
+  document__title: string;
+  group: string;
+  hit_dice: string;
+  hit_points: number;
+  img_main: string;
+  intelligence: number;
+  intelligence_save: number;
+  languages: string;
+  legendary_actions: BaseMonsterAction[];
+  legendary_desc: string;
+  name: string;
+  perception: string;
+  reactions: BaseMonsterAction[];
+  senses: string;
+  size: string;
+  skills: Record<string, any>;
+  slug: string;
+  special_abilities: BaseMonsterAction[];
+  speed: Record<string, any>;
+  spell_list: [];
+  strength: number;
+  strength_save: number;
+  subtype: string;
+  type: string;
+  wisdom: number;
+  wisdom_save: number;
+};
+
+// const MONSTER_BY_NAME = gql`
+//   query GetMonster($name: String!) {
+//     monster(filter: { name: $name }) {
+//       actions {
+//         name
+//         desc
+//         attack_bonus
+//         damage {
+//           damage_dice
+//           damage_type {
+//             index
+//             name
+//             url
+//           }
+//         }
+//       }
+//       alignment
+//       armor_class
+//       challenge_rating
+//       charisma
+//       condition_immunities {
+//         index
+//         name
+//         url
+//       }
+//       constitution
+//       damage_immunities
+//       damage_resistances
+//       damage_vulnerabilities
+//       dexterity
+//       forms {
+//         index
+//         name
+//         url
+//       }
+//       hit_dice
+//       hit_points
+//       index
+//       intelligence
+//       languages
+//       legendary_actions {
+//         attack_bonus
+//         desc
+//         name
+//       }
+//       name
+//       proficiencies {
+//         proficiency {
+//           index
+//           name
+//           url
+//         }
+//         value
+//       }
+//       reactions {
+//         desc
+//         name
+//       }
+//       senses {
+//         blindsight
+//         darkvision
+//         passive_perception
+//         tremorsense
+//         truesight
+//       }
+//       size
+//       special_abilities {
+//         desc
+//         name
+//       }
+//       speed {
+//         burrow
+//         climb
+//         fly
+//         hover
+//         swim
+//         walk
+//       }
+//       strength
+//       subtype
+//       type
+//       url
+//       wisdom
+//       xp
+//     }
+//   }
+// `;
+// interface ApolloMonster {
+//   monster: Monster;
+// }
+
+// interface ApolloMonsters {
+//   monsters: SmallMonsterCall[];
+// }
+// const MONSTER_DATA = gql`
+//   query GetAllMonsterData($skip: Int, $sort: SortFindManyMonsterInput) {
+//     monsters(skip: $skip, sort: $sort, limit: 100) {
+//       challenge_rating
+//       index
+//       name
+//       size
+//       subtype
+//       type
+//       url
+//       xp
+//     }
+//   }
+// `;
+// const [fetchMonsters, { data, fetchMore, loading, refetch }] = useLazyQuery(
+//   MONSTER_DATA,
+//   {
+//     fetchPolicy: "cache-and-network",
+//     nextFetchPolicy: "network-only",
+//     variables: {
+//       skip: monstersArr.length ?? 0,
+//       sort: sortStyle,
+//     },
+//   }
+// );
+
+// useEffect(() => {
+//   setMonstersArr((prev) => (prev.length ? prev : data?.monsters ?? []));
+// }, [data]);

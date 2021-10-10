@@ -1,25 +1,38 @@
 import React from "react";
-import { StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
+import { Divider } from "../../../components/Divider";
 import { Text, TransparentView } from "../../../components/Themed";
 import { MonsterSpecial_abilities } from "../../../types";
+import { NameAndDescText } from "./Text/NameAndDesc";
+import { SubSectionTitle } from "./Text/SubSectionTitle";
 
+interface AbilityType {
+  name: string;
+  desc: string;
+}
 interface SpecialAbilitiesComponentProps {
-  rawSpecialAbilities?: MonsterSpecial_abilities[];
+  rawSpecialAbilities?: AbilityType[];
 }
 export const SpecialAbilitiesComponent: React.FC<SpecialAbilitiesComponentProps> =
   ({ rawSpecialAbilities }) => {
-    return (<>
-    { !!rawSpecialAbilities ? <><TransparentView style={[styles.section]}>
-        {rawSpecialAbilities.map((item) => {
-          return (
-            <Text key={item.name} >
-              <Text style={styles.textLabel}>{item.name}{item.name === 'Legendary Resistance' && ' (3/day)'}:</Text> {item.desc}
-            </Text>
-          );
-        })}
-      </TransparentView></>
-      :
-      <></>}
+    return (
+      <>
+        {!!rawSpecialAbilities ? (
+          <>
+            <TransparentView style={[styles.section]}>
+              {rawSpecialAbilities.map((item) => {
+                return (
+                  <NameAndDescText key={item.name+": "} title={item.name}>
+                    {item.desc}
+                  </NameAndDescText>
+                );
+              })}
+            </TransparentView>
+            <Divider/>
+          </>
+        ) : (
+          <></>
+        )}
       </>
     );
   };
@@ -27,15 +40,5 @@ export const SpecialAbilitiesComponent: React.FC<SpecialAbilitiesComponentProps>
 const styles = StyleSheet.create({
   section: {
     paddingVertical: 8,
-  },
-  textDesc: {
-    padding: 6,
-  },
-  textLabel: {
-    fontWeight: "bold",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
   },
 });

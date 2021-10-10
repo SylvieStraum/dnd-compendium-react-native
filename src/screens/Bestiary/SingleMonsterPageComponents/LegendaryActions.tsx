@@ -1,29 +1,33 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { MonsterLegendary_actions } from "../../../types";
-import { Text,  TransparentView } from "../../../components/Themed";
+import { BaseMonsterAction } from "../../../types";
+import { Text, TransparentView } from "../../../components/Themed";
+import { NameAndDescText } from "./Text/NameAndDesc";
+import { SubSectionTitle } from "./Text/SubSectionTitle";
+import { Divider } from "../../../components/Divider";
 
 interface LegendaryActionsProps {
-  rawLegendaryActions?: MonsterLegendary_actions[];
+  legendaryActions?: BaseMonsterAction[];
+  legendaryDesc?: string;
 }
 export const LegendaryActions: React.FC<LegendaryActionsProps> = ({
-  rawLegendaryActions,
+  legendaryActions,
+  legendaryDesc,
 }) => {
-  const LegendaryActions = rawLegendaryActions?.map((item) => {
-    return (
-      <Text key={item.name} style={styles.textDesc}>
-        <Text style={styles.textLabel}>{item.name}:</Text> {item.desc}
-      </Text>
-    );
-  });
   return (
     <>
-      {!!rawLegendaryActions ? (
+      {!!legendaryActions ? (
         <>
-          < TransparentView style={[styles.section]}>
-            <Text style={styles.title}>Legendary Actions</Text>
-          </ TransparentView>
-          < TransparentView style={[styles.section]}>{LegendaryActions}</ TransparentView>
+         <SubSectionTitle title="Legendary Actions"/>
+          <Text>{legendaryDesc}</Text>
+          <TransparentView style={[styles.section]}>
+            {legendaryActions.map((item) => (
+                 <NameAndDescText key={item.name} title={item.name+': '} align="row">
+                 {item.desc}
+               </NameAndDescText>
+            ))}
+          </TransparentView>
+          <Divider/>
         </>
       ) : (
         <></>
@@ -35,15 +39,5 @@ export const LegendaryActions: React.FC<LegendaryActionsProps> = ({
 const styles = StyleSheet.create({
   section: {
     paddingVertical: 8,
-  },
-  textDesc: {
-    padding: 6,
-  },
-  textLabel: {
-    fontWeight: "bold",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
   },
 });

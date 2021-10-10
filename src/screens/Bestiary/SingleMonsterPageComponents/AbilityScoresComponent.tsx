@@ -1,6 +1,8 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Text,  TransparentView } from "../../../components/Themed";
+import { Divider } from "../../../components/Divider";
+import { Text, TransparentView } from "../../../components/Themed";
+import { NameAndDescText } from "./Text/NameAndDesc";
 interface AbilityScoresComponentProps {
   str: number;
   dex: number;
@@ -28,28 +30,27 @@ export const AbilityScoresComponent: React.FC<AbilityScoresComponentProps> = ({
     { stat: "CHA", val: cha },
   ];
 
-  return (
-    < TransparentView
+  return (<>
+    <TransparentView
       style={[
         styles.section,
-        { flexDirection: "row", justifyContent: "space-between" },
+        { flexDirection: "row", justifyContent: "space-between", width:'90%', alignSelf:'center' },
       ]}
     >
       {statArray.map((item) => {
         const mod = findMod(item.val);
-        return (
-          < TransparentView
-            key={item.stat}
-            style={{ flexDirection: "column", alignItems: "center" }}
-          >
-            <Text style={styles.textLabel}>{item.stat}</Text>
-            <Text>
-              {item.val}(+{mod})
-            </Text>
-          </ TransparentView>
+        return (<TransparentView style={{flexDirection:'column'}} key={item.stat}> 
+            <NameAndDescText title={item.stat} align="column" style={{alignItems:'center'}}>
+              {" "}
+              {item.val}({mod>0 ? "+" + mod : mod})
+            </NameAndDescText>
+            </TransparentView>
         );
       })}
-    </ TransparentView>
+      
+    </TransparentView>
+    <Divider/>
+    </>
   );
 };
 

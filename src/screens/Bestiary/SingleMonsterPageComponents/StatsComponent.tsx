@@ -2,39 +2,55 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { MonsterSpeed } from "../../../types";
 import { Text, TransparentView } from "../../../components/Themed";
+import { NameAndDescText } from "./Text/NameAndDesc";
+import { Divider } from "../../../components/Divider";
 
 interface StatsComponentProps {
   armorClass: number;
   hitPoints: number;
   hitDice: string;
-  speed: MonsterSpeed;
-  con: number;
-  findMod: (num: number) => number;
+  armorType: string;
+  speed: {};
+  languages: string;
+  senses: string;
 }
 export const StatsComponent: React.FC<StatsComponentProps> = ({
   armorClass,
+  armorType,
   hitPoints,
   hitDice,
   speed,
-  con,
-  findMod,
+  languages,
+  senses,
 }) => {
-  return (
+  return (<>
     <TransparentView style={styles.section}>
-      <Text>Armor Class: {armorClass}</Text>
-      <Text>
-        Hit Points: {hitPoints} ({hitDice} +{" "}
-        {parseInt(hitDice.split("d")[0]) * findMod(con)})
-      </Text>
-      <Text>
-        Speed:{" "}
-        {Object.entries(speed).map((item) => {
-          if (item[1] && item[1] !== "MonsterSpeed") {
-            return `${item[0] + " " + item[1]}`;
+      <NameAndDescText title="Armor Class: ">
+        {armorClass}
+        {armorType && ` (${armorType})`}
+      </NameAndDescText>
+      <NameAndDescText title="Hit Points: ">
+        {hitPoints} ({hitDice})
+      </NameAndDescText>
+      <NameAndDescText title="Speed: ">
+        {Object.entries(speed).map((item, index, arr) => {
+          if (item[1] === true) {
+            return `${item[0]}, `;
           }
+          return `${item[0] + " " + item[1]}${
+            index === arr.length - 1 ? "." : ", "
+          }`;
         })}
-      </Text>
+      </NameAndDescText>
+      <NameAndDescText title="Languages: ">
+      {languages ?? "none"}
+      </NameAndDescText>
+      <NameAndDescText title="Senses: ">
+      {senses}
+      </NameAndDescText>
+      <Divider/>
     </TransparentView>
+    </>
   );
 };
 
@@ -48,8 +64,13 @@ const styles = StyleSheet.create({
   textLabel: {
     fontWeight: "bold",
   },
-  title: {
-    fontSize: 28,
+  subSectionTitle: {
+    fontSize: 16,
     fontWeight: "bold",
+    width: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
   },
 });

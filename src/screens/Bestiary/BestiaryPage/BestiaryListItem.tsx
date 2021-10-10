@@ -1,19 +1,24 @@
 import React, { useMemo, useRef } from "react";
 import { Pressable, Animated, Dimensions, StyleSheet } from "react-native";
-import { SmallMonsterCall } from "../../../types";
+import { DjangoMonster, SmallMonsterCall } from "../../../types";
 import { CARD_HEIGHT as DEFAULT_HEIGHT, Card } from "../../../components/Card";
-import { View, ViewProps, Text } from "../../../components/Themed";
+import {
+  ViewProps,
+  Text,
+  TransparentView,
+} from "../../../components/Themed";
 import { useTheme } from "../../../hooks/useTheme";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface BestiaryListItemProps extends ViewProps {
   onPress: () => void;
   y: Animated.Value;
-  data?: SmallMonsterCall;
+  data?: DjangoMonster;
   index: number;
 }
 
-
-const CARD_HEIGHT = DEFAULT_HEIGHT 
+const MARGIN = 16;
+const CARD_HEIGHT = DEFAULT_HEIGHT + MARGIN * 2;
 const { height: wHeight } = Dimensions.get("window");
 const height = wHeight - 64;
 
@@ -23,7 +28,7 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
   data,
   index,
 }) => {
-  const theme = useTheme()
+  const theme = useTheme();
 
   const position = Animated.subtract(index * CARD_HEIGHT, y);
   const isDisappearing = -CARD_HEIGHT;
@@ -71,50 +76,62 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
         styles.container,
       ]}
     >
-      <Pressable onPress={onPress}>
+      <TouchableOpacity onPress={onPress}>
         <Card
           style={{
             justifyContent: "space-evenly",
             borderRadius: 8,
             paddingHorizontal: 12,
-            backgroundColor:'transparent',
-            borderColor:theme.colors.border,
-            borderBottomWidth:1,
-            borderBottomRightRadius:40,
-            borderBottomLeftRadius:40,
-
+            backgroundColor: "transparent",
+            width: "100%",
           }}
         >
           {data?.name && (
             <>
-              <Text style={styles.name}> {data?.name}</Text>
-              <Text style={styles.challenge}>
-                CR:{data.challenge_rating} | <Text style={styles.monsterType}>{data.size} {data.type}{" "}
-                {!!data?.subtype && `(${data.subtype})`}</Text>
-              </Text>
+              <Text style={styles.name}>{data?.name}</Text>
+
+              <TransparentView
+                style={[
+                  {
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  },
+                ]}
+              >
+                <Text style={styles.challenge}>
+                  CR:{data.challenge_rating} |{" "}
+                  <Text style={styles.monsterType}>
+                    {data.size} {data.type}{" "}
+                    {!!data?.subtype && `(${data.subtype})`}
+                  </Text>
+                </Text>
+                <Text style={styles.monsterType}>{data.document__slug}</Text>
+              </TransparentView>
             </>
           )}
         </Card>
-      </Pressable>
+      </TouchableOpacity>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 0,
+    marginVertical: MARGIN,
     alignSelf: "center",
+    width: "100%",
   },
 
   name: {
     fontWeight: "bold",
-    fontSize:18
+    fontSize: 18,
   },
   monsterType: {
-    fontStyle:'italic',
-    fontSize:13
+    fontStyle: "normal",
+    fontSize: 14,
   },
   challenge: {
-    fontSize:14
+    fontSize: 16,
   },
 });
