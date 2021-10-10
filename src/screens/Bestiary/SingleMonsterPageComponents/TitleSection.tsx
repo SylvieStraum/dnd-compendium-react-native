@@ -10,6 +10,7 @@ interface MonsterTitleProps extends ViewProps {
   subtype?: string;
   alignment: string;
   source: string
+  slug:string
 }
 export const TitleSection: React.FC<MonsterTitleProps> = ({
   size,
@@ -17,7 +18,8 @@ export const TitleSection: React.FC<MonsterTitleProps> = ({
   subtype,
   alignment,
   name,
-  source
+  source,
+  slug
 }) => {
   return (
     <TransparentView style={styles.section}>
@@ -25,7 +27,7 @@ export const TitleSection: React.FC<MonsterTitleProps> = ({
       <Text>
         {size} | {type} | {subtype && subtype + " |"} {alignment}
       </Text>
-      <Text>{source}</Text>
+      <Text>{source} ({slug})</Text>
     </TransparentView>
   );
 };

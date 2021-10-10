@@ -9,6 +9,8 @@ interface StatsComponentProps {
   hitDice: string;
   armorType:string;
   speed: {};
+  languages:string
+  senses:string
 }
 export const StatsComponent: React.FC<StatsComponentProps> = ({
   armorClass,
@@ -16,6 +18,8 @@ export const StatsComponent: React.FC<StatsComponentProps> = ({
   hitPoints,
   hitDice,
   speed,
+  languages,
+  senses
 }) => {
   return (
     <TransparentView style={styles.section}>
@@ -31,6 +35,14 @@ export const StatsComponent: React.FC<StatsComponentProps> = ({
           }
           return `${item[0] + " " + item[1]}${index===arr.length-1 ? '.':', '}`;
         })}
+      </Text>
+      <Text>
+        <Text style={styles.textLabel}>Languages:</Text>
+        <Text> {languages ?? 'none'} </Text>
+      </Text>
+      <Text>
+        <Text style={styles.textLabel}>Senses:</Text>
+        <Text> {senses}</Text>
       </Text>
     </TransparentView>
   );

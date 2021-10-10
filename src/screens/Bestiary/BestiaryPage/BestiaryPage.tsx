@@ -113,7 +113,7 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
           />
         )}
         keyExtractor={(item: any) => {
-          return item.index;
+          return item.name
         }}
         {...{ onScroll }}
       />

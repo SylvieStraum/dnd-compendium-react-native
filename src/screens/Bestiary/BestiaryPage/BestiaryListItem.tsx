@@ -3,12 +3,12 @@ import { Pressable, Animated, Dimensions, StyleSheet } from "react-native";
 import { DjangoMonster, SmallMonsterCall } from "../../../types";
 import { CARD_HEIGHT as DEFAULT_HEIGHT, Card } from "../../../components/Card";
 import {
-  View,
   ViewProps,
   Text,
   TransparentView,
 } from "../../../components/Themed";
 import { useTheme } from "../../../hooks/useTheme";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface BestiaryListItemProps extends ViewProps {
   onPress: () => void;
@@ -76,7 +76,7 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
         styles.container,
       ]}
     >
-      <Pressable onPress={onPress}>
+      <TouchableOpacity onPress={onPress}>
         <Card
           style={{
             justifyContent: "space-evenly",
@@ -111,7 +111,7 @@ export const BestiaryListItem: React.FC<BestiaryListItemProps> = ({
             </>
           )}
         </Card>
-      </Pressable>
+      </TouchableOpacity>
     </Animated.View>
   );
 };

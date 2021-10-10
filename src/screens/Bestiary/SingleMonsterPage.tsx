@@ -48,6 +48,7 @@ export const SingleMonsterPage: React.FC<SingleMonsterScreenProps> = ({
             subtype={monster.subtype}
             alignment={monster.alignment}
             source={monster.document__title}
+            slug={monster.document__slug}
           />
           {monster.img_main && (
             <Image
@@ -66,6 +67,8 @@ export const SingleMonsterPage: React.FC<SingleMonsterScreenProps> = ({
             hitDice={monster.hit_dice}
             hitPoints={monster.hit_points}
             speed={monster.speed}
+            senses={monster.senses}
+            languages={monster.languages}
           />
           <AbilityScoresComponent
             str={monster.strength}
