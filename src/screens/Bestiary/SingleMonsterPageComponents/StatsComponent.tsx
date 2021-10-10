@@ -2,15 +2,16 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { MonsterSpeed } from "../../../types";
 import { Text, TransparentView } from "../../../components/Themed";
+import { NameAndDescText } from "./Text/NameAndDesc";
 
 interface StatsComponentProps {
   armorClass: number;
   hitPoints: number;
   hitDice: string;
-  armorType:string;
+  armorType: string;
   speed: {};
-  languages:string
-  senses:string
+  languages: string;
+  senses: string;
 }
 export const StatsComponent: React.FC<StatsComponentProps> = ({
   armorClass,
@@ -19,31 +20,34 @@ export const StatsComponent: React.FC<StatsComponentProps> = ({
   hitDice,
   speed,
   languages,
-  senses
+  senses,
 }) => {
   return (
     <TransparentView style={styles.section}>
-      <Text><Text style={styles.textLabel}>Armor Class:</Text> {armorClass}{armorType&&` (${armorType})`}</Text>
-      <Text>
-      <Text style={styles.textLabel}>Hit Points:</Text> {hitPoints} ({hitDice})
-      </Text>
-      <Text>
-      <Text style={styles.textLabel}>Speed:</Text>{" "}
+      <NameAndDescText title="Armor Class: ">
+        {armorClass}
+        {armorType && ` (${armorType})`}
+      </NameAndDescText>
+      <NameAndDescText title="Hit Points: ">
+        {hitPoints} ({hitDice})
+      </NameAndDescText>
+      <NameAndDescText title="Speed: ">
         {Object.entries(speed).map((item, index, arr) => {
-          if (item[1]===true) {
+          if (item[1] === true) {
             return `${item[0]}, `;
           }
-          return `${item[0] + " " + item[1]}${index===arr.length-1 ? '.':', '}`;
+          return `${item[0] + " " + item[1]}${
+            index === arr.length - 1 ? "." : ", "
+          }`;
         })}
-      </Text>
-      <Text>
-        <Text style={styles.textLabel}>Languages:</Text>
-        <Text> {languages ?? 'none'} </Text>
-      </Text>
-      <Text>
-        <Text style={styles.textLabel}>Senses:</Text>
-        <Text> {senses}</Text>
-      </Text>
+      </NameAndDescText>
+      <NameAndDescText title="Languages: ">
+      {languages ?? "none"}
+      </NameAndDescText>
+      <NameAndDescText title="Senses: ">
+      {senses}
+      </NameAndDescText>
+   
     </TransparentView>
   );
 };

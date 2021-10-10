@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { BaseMonsterAction } from "../../../types";
 import { Text, TransparentView } from "../../../components/Themed";
+import { NameAndDescText } from "./Text/NameAndDesc";
+import { SubSectionTitle } from "./Text/SubSectionTitle";
 
 interface LegendaryActionsProps {
   legendaryActions?: BaseMonsterAction[];
@@ -15,15 +17,13 @@ export const LegendaryActions: React.FC<LegendaryActionsProps> = ({
     <>
       {!!legendaryActions ? (
         <>
-          <TransparentView style={[styles.section]}>
-            <Text style={styles.subSectionTitle}>Legendary Actions</Text>
-          </TransparentView>
+         <SubSectionTitle title="Legendary Actions"/>
           <Text>{legendaryDesc}</Text>
           <TransparentView style={[styles.section]}>
             {legendaryActions.map((item) => (
-              <Text key={item.name} style={styles.textDesc}>
-                <Text style={styles.textLabel}>{item.name}:</Text> {item.desc}
-              </Text>
+                 <NameAndDescText key={item.name} title={item.name+': '} align="row">
+                 {item.desc}
+               </NameAndDescText>
             ))}
           </TransparentView>
         </>
@@ -37,20 +37,5 @@ export const LegendaryActions: React.FC<LegendaryActionsProps> = ({
 const styles = StyleSheet.create({
   section: {
     paddingVertical: 8,
-  },
-  textDesc: {
-    padding: 6,
-  },
-  textLabel: {
-    fontWeight: "bold",
-  },
-  subSectionTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    width: "80%",
-    alignItems: "center",
-    justifyContent: "center",
-    borderBottomColor: "grey",
-    borderBottomWidth: 1,
   },
 });

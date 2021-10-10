@@ -1,10 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import {
-  MonsterCondition_immunities,
-  MonsterProficiencies,
-} from "../../../types";
 import { Text, TransparentView } from "../../../components/Themed";
+import { NameAndDescText } from "./Text/NameAndDesc";
 
 interface ProficiencyComponentProps {
   skills: {};
@@ -24,36 +21,49 @@ export const ProficiencyComponent: React.FC<ProficiencyComponentProps> = ({
 }) => {
   return (
     <TransparentView style={[styles.section]}>
-      {!!saves && (
-        <Text>
-          <Text style={styles.textLabel}>Saving throws:</Text>{" "}
-          {Object.entries(saves).map((item, index, arr) => {
-            if (item[1] === null) {
-              return;
-            }
-            let mathOp = !!item[1] ? "+" : "";
-            return `${item[0]}: ${mathOp + item[1]}${" "}`;
-          })}
-        </Text>
+      {!!Object.values(saves).every((item) => item !== null) && (
+        <NameAndDescText title="Saving Throws: ">
+          <Text>
+            {" "}
+            {Object.entries(saves).map((item) => {
+              if (item[1] === null) {
+                return;
+              }
+              let mathOp = !!item[1] ? "+" : "";
+              return `${item[0]}: ${mathOp + item[1]}${" "}`;
+            })}
+          </Text>
+        </NameAndDescText>
       )}
-      {skills && (
-        <Text>
-          <Text style={styles.textLabel}>Skills:</Text>{" "}
+      {!!Object.entries(skills).length && (
+        <NameAndDescText title="Skills: ">
           {Object.entries(skills).map((item, index, arr) => {
             let mathOp = !!item[1] ? "+" : "";
-            return `${item[0]}: ${mathOp+item[1]}${
+            return `${item[0]}: ${mathOp + item[1]}${
               index === arr.length - 1 ? "." : ", "
             }`;
           })}
-        </Text>
+        </NameAndDescText>
       )}
-      {!!immunities && <Text><Text style={styles.textLabel}>Damage Immunities:</Text> {immunities}</Text>}
-      {!!resistances && <Text><Text style={styles.textLabel}>Damage Resistances:</Text> {resistances}</Text>}
+      {!!immunities && (
+        <NameAndDescText title="Damage Immunities: ">
+          {immunities}
+        </NameAndDescText>
+      )}
+      {!!resistances && (
+        <NameAndDescText title="Damage Resistances: ">
+          {resistances}
+        </NameAndDescText>
+      )}
       {!!vulnerabilities && (
-        <Text><Text style={styles.textLabel}>Damage Vulnerabilities:</Text> {vulnerabilities}</Text>
+        <NameAndDescText title="Damage Vulnerabilities: ">
+          {vulnerabilities}
+        </NameAndDescText>
       )}
       {!!conditionImmunities && (
-        <Text><Text style={styles.textLabel}>Condition Immunities:</Text> {conditionImmunities}</Text>
+        <NameAndDescText title="Condition Immunities: ">
+          {conditionImmunities}
+        </NameAndDescText>
       )}
     </TransparentView>
   );

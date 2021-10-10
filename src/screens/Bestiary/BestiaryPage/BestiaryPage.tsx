@@ -81,6 +81,7 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
       <AnimatedFlatList
         overScrollMode="always"
         scrollEventThrottle={16}
+        style={{width:'90%'}}
         indicatorStyle="white"
         bounces={false}
         data={monstersArr}

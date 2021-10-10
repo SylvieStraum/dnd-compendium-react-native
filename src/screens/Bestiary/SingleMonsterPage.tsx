@@ -26,12 +26,14 @@ interface SingleMonsterScreenProps {
 export const SingleMonsterPage: React.FC<SingleMonsterScreenProps> = ({
   navigation,
   route: {
-    params: { name, monster },
+    params: { monster },
   },
 }) => {
   const abilityMod = (score: number) => {
     return Math.floor((score - 10) / 2);
   };
+
+  console.log(monster)
 
   return (
     <SafeBackGround style={[styles.container]}>
