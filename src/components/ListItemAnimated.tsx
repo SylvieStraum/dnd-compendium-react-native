@@ -16,7 +16,7 @@ interface ListeItemAnimatedProps extends ViewProps {
 const MARGIN = 16;
 const CARD_HEIGHT = DEFAULT_HEIGHT + MARGIN * 2;
 const { height: wHeight } = Dimensions.get("window");
-const height = wHeight - 144;
+const height = wHeight - 80;
 
 export const ListeItemAnimated: React.FC<ListeItemAnimatedProps> = ({
   onPress,
@@ -27,9 +27,9 @@ export const ListeItemAnimated: React.FC<ListeItemAnimatedProps> = ({
   const theme = useTheme();
 
   const position = Animated.subtract(index * CARD_HEIGHT, y);
-  const isDisappearing = -CARD_HEIGHT/2;
+  const isDisappearing = -CARD_HEIGHT;
   const isTop = 0;
-  const isBottom = height - CARD_HEIGHT/2;
+  const isBottom = height - CARD_HEIGHT;
   const isAppearing = height;
 
   const translateY = useMemo(() => {
