@@ -1,13 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React from "react";
 import {
   StyleSheet,
-  FlatList,
-  Animated,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
 } from "react-native";
-import axios from "axios";
-import { TransparentView, View, Text } from "../../../components/Themed";
+import { View } from "../../../components/Themed";
 import { TextInput } from "react-native-gesture-handler";
 import { HomeButton } from "../../../components/HomeButton";
 
