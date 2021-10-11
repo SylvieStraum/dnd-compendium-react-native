@@ -15,6 +15,7 @@ import { useTheme } from "../../../hooks/useTheme";
 import { Divider } from "../../../components/Divider";
 import { useModal } from "../../../hooks/useModal";
 import { MyModal } from "../../../components/MyModal";
+import { ListeItemAnimated } from "../../../components/ListItemAnimated";
 
 interface DjangoCall {
   data: {
@@ -30,7 +31,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
   const isFocused = useIsFocused();
   const theme = useTheme();
-  const modal = useModal()
+  const modal = useModal();
 
   const [loading, setLoading] = useState(false);
   const [monstersArr, setMonstersArr] = useState<DjangoMonster[]>([]);
@@ -70,51 +71,53 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
     []
   );
 
+  const _renderItem = ({ item, index }: { item: any; index: number }) => (
+    <ListeItemAnimated
+      key={item.name}
+      y={y}
+      index={index}
+      onPress={() => {
+        navigation.navigate("IndividualMonsterPage", {
+          monster: item,
+          name: item.name,
+        });
+      }}
+    >
+      <BestiaryListItem data={item} />
+    </ListeItemAnimated>
+  );
+
   return (
     <>
-    <MyModal visible={modal.isVisible} setVisibility={modal.toggle} />
-    <SafeBackGround style={[styles.container]}>
-      <AnimatedFlatList
-        overScrollMode="always"
-        scrollEventThrottle={16}
-        style={{width:'90%'}}
-        indicatorStyle="white"
-        bounces={false}
-        data={monstersArr}
-        extraData={monstersArr}
-        scrollToOverflowEnabled
-        getItemLayout={getItemLayout}
-        maxToRenderPerBatch={21}
-        onEndReachedThreshold={3}
-        ItemSeparatorComponent={Divider}
-        onEndReached={async () => {
-          await djangoAsyncCall(nextUrl);
-        }}
-        refreshing={loading}
-        onRefresh={async () => {
-          setMonstersArr([]);
-          await djangoAsyncCall();
-        }}
-        renderItem={({ item, index }: { item: any; index: number }) => (
-          <BestiaryListItem
-            key={item.name}
-            y={y}
-            index={index}
-            data={item}
-            onPress={() => {
-              navigation.navigate("IndividualMonsterPage", {
-                monster: item,
-                name: item.name,
-              });
-            }}
-          />
-        )}
-        keyExtractor={(item: any) => {
-          return item.name
-        }}
-        {...{ onScroll }}
-      />
-    </SafeBackGround>
+      <MyModal visible={modal.isVisible} setVisibility={modal.toggle} />
+      <SafeBackGround style={[styles.container]}>
+        <AnimatedFlatList
+          overScrollMode="always"
+          scrollEventThrottle={16}
+          style={{ width: "90%" }}
+          indicatorStyle="white"
+          bounces={false}
+          data={monstersArr}
+          extraData={monstersArr}
+          scrollToOverflowEnabled
+          getItemLayout={getItemLayout}
+          maxToRenderPerBatch={21}
+          onEndReachedThreshold={3}
+          onEndReached={async () => {
+            await djangoAsyncCall(nextUrl);
+          }}
+          refreshing={loading}
+          onRefresh={async () => {
+            setMonstersArr([]);
+            await djangoAsyncCall();
+          }}
+          renderItem={_renderItem}
+          keyExtractor={(item: any) => {
+            return item.name;
+          }}
+          {...{ onScroll }}
+        />
+      </SafeBackGround>
     </>
   );
 };

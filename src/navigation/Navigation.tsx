@@ -6,7 +6,6 @@ import {
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
-import { ProfileStackNavigator } from "./ProfileStackNavigator";
 import { BestiaryStackNavigator } from "./BestiaryStackNavigator";
 import { MainStackNavigator } from "./MainStackNavigator";
 
