@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, FlatList, Animated, Modal } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, FlatList, Animated } from "react-native";
 import axios from "axios";
 
 import {
@@ -12,10 +12,10 @@ import { useIsFocused } from "@react-navigation/core";
 import { CARD_HEIGHT } from "../../../components/Card";
 import { SafeBackGround } from "../../../components/Themed";
 import { useTheme } from "../../../hooks/useTheme";
-import { Divider } from "../../../components/Divider";
 import { useModal } from "../../../hooks/useModal";
 import { MyModal } from "../../../components/MyModal";
 import { ListeItemAnimated } from "../../../components/ListItemAnimated";
+import { BestiaryQueryHeader } from "./BestiaryQueryHeader";
 
 interface DjangoCall {
   data: {
@@ -25,7 +25,7 @@ interface DjangoCall {
     results: DjangoMonster[];
   };
 }
-
+const BASE_QUERY = "https://api.open5e.com/monsters/?limit=100";
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
@@ -33,19 +33,25 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
   const theme = useTheme();
   const modal = useModal();
 
+  const [queryAddOn, setQueryAddOn] = useState("");
   const [loading, setLoading] = useState(false);
   const [monstersArr, setMonstersArr] = useState<DjangoMonster[]>([]);
 
-  const [sortStyle, setSortStyle] =
-    useState<SortFindManyMonsterInput>("NAME_ASC");
   const y = new Animated.Value(0);
   const [nextUrl, setNextUrl] = useState<string | undefined>();
 
-  const djangoAsyncCall = async (newUrl?: string) => {
+  const djangoAsyncCall = async (useNewUrl: boolean, useQuery: boolean) => {
     setLoading(true);
-    const djangoMon: DjangoCall = await axios(
-      newUrl ?? "https://api.open5e.com/monsters/?limit=100"
-    );
+    let queryToUse = BASE_QUERY;
+    if (useNewUrl) {
+      queryToUse = nextUrl ?? BASE_QUERY;
+    }
+
+    if (useQuery) {
+      setMonstersArr([]);
+      queryToUse = `https://api.open5e.com/monsters/?search=${queryAddOn}`;
+    }
+    const djangoMon: DjangoCall = await axios(queryToUse);
     setNextUrl(djangoMon.data.next);
     setMonstersArr((prev) =>
       prev.length
@@ -55,8 +61,10 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
     setLoading(false);
   };
   useEffect(() => {
-    !monstersArr.length && djangoAsyncCall();
+    !monstersArr.length && djangoAsyncCall(false, false);
   }, [isFocused]);
+
+  useEffect(() => {}, [queryAddOn]);
 
   const onScroll = Animated.event([{ nativeEvent: { contentOffset: { y } } }], {
     useNativeDriver: true,
@@ -91,6 +99,12 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
     <>
       <MyModal visible={modal.isVisible} setVisibility={modal.toggle} />
       <SafeBackGround style={[styles.container]}>
+        <BestiaryQueryHeader
+          goHome={() => navigation.navigate("Home")}
+          query={queryAddOn}
+          setQuery={setQueryAddOn}
+          fireOffQuery={async () => await djangoAsyncCall(false, true)}
+        />
         <AnimatedFlatList
           overScrollMode="always"
           scrollEventThrottle={16}
@@ -104,12 +118,12 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
           maxToRenderPerBatch={21}
           onEndReachedThreshold={3}
           onEndReached={async () => {
-            await djangoAsyncCall(nextUrl);
+            await djangoAsyncCall(true, false);
           }}
           refreshing={loading}
           onRefresh={async () => {
             setMonstersArr([]);
-            await djangoAsyncCall();
+            await djangoAsyncCall(false, false);
           }}
           renderItem={_renderItem}
           keyExtractor={(item: any) => {

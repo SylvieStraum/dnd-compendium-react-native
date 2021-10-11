@@ -11,7 +11,7 @@ const Stack = createStackNavigator<BestiaryStackParamList>();
 export const BestiaryStackNavigator: React.FC<unknown> = () => {
   return (
     <Stack.Navigator
-    screenOptions={{headerTitle:'Bestiary', headerTitleAlign:'center'}}
+    screenOptions={{headerShown:false}}
     >
       <Stack.Screen name="BestiaryHome"  component={BestiaryPage} />
       <Stack.Screen

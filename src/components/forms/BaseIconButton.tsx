@@ -1,9 +1,10 @@
 import React from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import Colors from "../../constants/Colors";
+import { useTheme } from "../../hooks/useTheme";
 
 export const BaseIconButton = ({ onPress, iconType }: { onPress?: () => void, iconType:string }) => {
+  const theme=useTheme()
   return (
-      <Icon.Button name={iconType} size={30} color={Colors.dark.text} backgroundColor="transparent"  onPress={onPress} />
+      <Icon.Button name={iconType} size={30} color={theme.colors.tint} backgroundColor="transparent"  onPress={onPress} />
   );
 };

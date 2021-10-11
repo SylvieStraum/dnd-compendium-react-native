@@ -1,9 +1,7 @@
 import React, { useMemo, useRef } from "react";
 import { Animated, Dimensions, StyleSheet } from "react-native";
 import { CARD_HEIGHT as DEFAULT_HEIGHT, Card } from "./Card";
-import {
-  ViewProps,
-} from "./Themed";
+import { ViewProps } from "./Themed";
 import { useTheme } from "../hooks/useTheme";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -22,7 +20,7 @@ export const ListeItemAnimated: React.FC<ListeItemAnimatedProps> = ({
   onPress,
   y,
   index,
-  children
+  children,
 }) => {
   const theme = useTheme();
 
@@ -62,29 +60,19 @@ export const ListeItemAnimated: React.FC<ListeItemAnimatedProps> = ({
     return position.interpolate({
       inputRange: [isDisappearing, isTop, isBottom, isAppearing],
       outputRange: [0.1, 1, 1, 0.1],
-      extrapolate: 'clamp',
+      extrapolate: "clamp",
     });
   }, [y]);
   return (
     <Animated.View
       style={[
-        { opacity: opacity, transform: [{ translateY }, { scale }]},
+        { opacity: opacity, transform: [{ translateY }, { scale }] },
         styles.container,
       ]}
     >
       <TouchableOpacity onPress={onPress}>
-        <Card
-          style={{
-            justifyContent: "space-evenly",
-            borderRadius: 8,
-            paddingHorizontal: 12,
-            backgroundColor: "transparent",
-            width: "100%",
-            borderColor:theme.colors.border,
-            borderWidth:1
-          }}
-        >
-         {children}
+        <Card style={[styles.card, { borderColor: theme.colors.border, backgroundColor:theme.colors.backgroundColor }]}>
+          {children}
         </Card>
       </TouchableOpacity>
     </Animated.View>
@@ -108,5 +96,13 @@ const styles = StyleSheet.create({
   },
   challenge: {
     fontSize: 16,
+  },
+  card: {
+    justifyContent: "space-evenly",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    backgroundColor: "transparent",
+    width: "100%",
+    borderWidth: 1,
   },
 });

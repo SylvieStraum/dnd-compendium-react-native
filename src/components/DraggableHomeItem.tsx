@@ -1,13 +1,6 @@
 import React, { useRef } from "react";
-import {
-  Animated,
-  StyleSheet,
-  PanResponder,
-  Dimensions,
-} from "react-native";
-import {
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { Animated, StyleSheet, PanResponder, Dimensions } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { Theme } from "../hooks/useTheme";
 import { View, ViewProps } from "./Themed";
 
@@ -37,10 +30,9 @@ export const DraggableHomeItem: React.FC<DraggableHomeItemProps> = ({
       },
     })
   ).current;
-
+  panResponder.panHandlers.onResponderTerminate = onPress;
   return (
     <Animated.View
-     onTouchEnd={onPress}
       style={[
         {
           transform: [{ translateX: pan.x }, { translateY: pan.y }],
@@ -66,8 +58,6 @@ const styles = StyleSheet.create({
     width: WIDTH,
     alignItems: "center",
     justifyContent: "center",
-  },
-  box: {
-    borderRadius: 5,
+    borderRadius: 100,
   },
 });
