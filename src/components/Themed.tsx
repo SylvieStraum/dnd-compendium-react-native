@@ -5,7 +5,7 @@
 
 import { useTheme } from '@react-navigation/native';
 import * as React from 'react';
-import { Text as DefaultText, View as DefaultView, Appearance } from 'react-native';
+import { Text as DefaultText, View as DefaultView, ActivityIndicatorProps, ActivityIndicator } from 'react-native';
 import { SafeAreaView, SafeAreaViewProps } from 'react-native-safe-area-context';
 import { useThemeColor } from '../hooks/useThemeColor';
 
@@ -17,6 +17,7 @@ type ThemeProps = {
 export type TextProps = ThemeProps & DefaultText['props'];
 export type ViewProps = ThemeProps & DefaultView['props'];
 export type SafeBackgroundProps = ThemeProps & SafeAreaViewProps
+export type LoaderProps = ThemeProps & ActivityIndicatorProps
 
 export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
@@ -50,4 +51,11 @@ export function SafeBackGround(props: SafeBackgroundProps) {
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background')
   
   return <SafeAreaView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+export function ThemedLoader(props: LoaderProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'border')
+  
+  return <ActivityIndicator color={color} style={[style]} {...otherProps} />;
 }

@@ -104,5 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     width: "100%",
     borderWidth: 1,
+    borderTopWidth:0,
+    borderBottomWidth:0
   },
 });

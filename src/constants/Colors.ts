@@ -2,7 +2,7 @@ const tintColorLight = '#484b6a';
 const tintColorDark = '#fff';
 
 export default {
-  light: {
+  dark: {
     primary:'#000',   
     card: '#484b6a',
     border: '#9090D9',
@@ -14,7 +14,7 @@ export default {
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorLight,
   },
-  dark: {
+  light: {
     primary:'#FBFAF5',   
     card: '#2f2b3b',
     border: '#f23269',

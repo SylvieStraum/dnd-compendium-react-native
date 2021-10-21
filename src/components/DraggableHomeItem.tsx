@@ -21,7 +21,7 @@ export const DraggableHomeItem: React.FC<DraggableHomeItemProps> = ({
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }]),
+      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {useNativeDriver:false}),
       onPanResponderRelease: () => {
         Animated.spring(pan, {
           toValue: { x: 0, y: 0 },
@@ -30,9 +30,9 @@ export const DraggableHomeItem: React.FC<DraggableHomeItemProps> = ({
       },
     })
   ).current;
-  panResponder.panHandlers.onResponderTerminate = onPress;
   return (
     <Animated.View
+    onTouchEnd={()=>setTimeout(onPress, 200)}
       style={[
         {
           transform: [{ translateX: pan.x }, { translateY: pan.y }],
