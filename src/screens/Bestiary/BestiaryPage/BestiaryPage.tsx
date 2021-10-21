@@ -1,77 +1,105 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, FlatList, Animated } from "react-native";
+import { StyleSheet, FlatList, Animated, RefreshControl } from "react-native";
 import axios from "axios";
-
-import {
-  SortFindManyMonsterInput,
-  DjangoMonster,
-} from "../../../types/monsterTypes";
+import { DjangoMonster } from "../../../types/monsterTypes";
+import { useQuery, useInfiniteQuery, useQueryClient } from "react-query";
 import { Navigation, Screen } from "../../../types";
 import { BestiaryListItem } from "./BestiaryListItem";
-import { useIsFocused } from "@react-navigation/core";
 import { CARD_HEIGHT } from "../../../components/Card";
-import { SafeBackGround } from "../../../components/Themed";
-import { useTheme } from "../../../hooks/useTheme";
+import { SafeBackGround, Text, ThemedLoader } from "../../../components/Themed";
 import { useModal } from "../../../hooks/useModal";
-import { MyModal } from "../../../components/MyModal";
+import { MyFilterModal, SortObj } from "../../../components/MyFilterModal";
 import { ListeItemAnimated } from "../../../components/ListItemAnimated";
 import { BestiaryQueryHeader } from "./BestiaryQueryHeader";
+import { useTheme } from "../../../hooks/useTheme";
 
 interface DjangoCall {
-  data: {
-    next: string;
-    previous: string;
-    count: number;
-    results: DjangoMonster[];
-  };
+  next: string;
+  previous: string;
+  count: number;
+  results: DjangoMonster[];
 }
-const BASE_QUERY = "https://api.open5e.com/monsters/?limit=100";
+
+const BASE_QUERY = "https://api.open5e.com/monsters";
+const LIMIT="&limit=100"
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+const MONSTER_FILTERS: SortObj[] = [
+  { value: "name", sort: "asc", label: "name asc" },
+  { value: "-name", sort: "desc", label: "name desc" },
+  // { value: "challenge_rating", sort: "asc", label: "CR asc" },
+  // { value: "-challenge_rating", sort: "desc", label: "CR desc" },
+  { value: "type", sort: "asc", label: "type asc" },
+  { value: "-type", sort: "desc", label: "type desc" },
+  { value: "size", sort: "asc", label: "size asc" },
+  { value: "-size", sort: "desc", label: "size desc" },
+];
 
 export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
-  const isFocused = useIsFocused();
-  const theme = useTheme();
   const modal = useModal();
+  const theme = useTheme();
+  const queryClient = useQueryClient();
 
-  const [queryAddOn, setQueryAddOn] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [monstersArr, setMonstersArr] = useState<DjangoMonster[]>([]);
-
-  const y = new Animated.Value(0);
-  const [nextUrl, setNextUrl] = useState<string | undefined>();
-
-  const djangoAsyncCall = async (useNewUrl: boolean, useQuery: boolean) => {
-    setLoading(true);
-    let queryToUse = BASE_QUERY;
-    if (useNewUrl) {
-      queryToUse = nextUrl ?? BASE_QUERY;
-    }
-
-    if (useQuery) {
-      setMonstersArr([]);
-      queryToUse = `https://api.open5e.com/monsters/?search=${queryAddOn}`;
-    }
-    const djangoMon: DjangoCall = await axios(queryToUse);
-    setNextUrl(djangoMon.data.next);
-    setMonstersArr((prev) =>
-      prev.length
-        ? [...prev, ...djangoMon.data.results]
-        : djangoMon.data.results ?? []
-    );
-    setLoading(false);
-  };
-  useEffect(() => {
-    !monstersArr.length && djangoAsyncCall(false, false);
-  }, [isFocused]);
-
-  useEffect(() => {}, [queryAddOn]);
-
-  const onScroll = Animated.event([{ nativeEvent: { contentOffset: { y } } }], {
-    useNativeDriver: true,
+  const [footerIndex, setFooterIndex] = useState(100);
+  const [queryText, setQueryText] = useState("");
+  const [querySnapshot, setQuerySnapshot] = useState("");
+  const [animatedY] = useState(new Animated.Value(0));
+  const [sortQuery, setSortQuery] = useState<SortObj>({
+    value: "name",
+    sort: "desc",
+    label: "name asc",
   });
+  const {
+    data: allMonsterData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetching: allFetching,
+  } = useInfiniteQuery<DjangoCall, Error>(
+    ["BestiaryList", sortQuery.value],
+    async ({ pageParam = "" }) => {
+      let res;
+      if (!!pageParam) {
+        res = await axios.get(pageParam);
+        return res.data;
+      }
+      res = await axios.get(`${BASE_QUERY+'/?ordering='+sortQuery.value}`, {});
+      return res.data;
+    },
+    {
+      getPreviousPageParam: (firstPage) => firstPage.previous ?? false,
+      getNextPageParam: (lastPage) => lastPage.next ?? false,
+    }
+  );
 
+  const { data: filterdMonsterData, isFetching: filteredFetching } = useQuery<
+    { data: DjangoCall },
+    Error
+  >(
+    ["BestiarySearch", querySnapshot, sortQuery.value],
+    () =>
+      axios(
+        `${BASE_QUERY}/?search=${querySnapshot}&ordering=${sortQuery.value}${LIMIT}`
+      ),
+    { enabled: !!querySnapshot }
+  );
+  useEffect(() => {
+    if (!allMonsterData?.pages.length) {
+      return;
+    }
+    setFooterIndex(100 * allMonsterData?.pages.length);
+  }, [allMonsterData?.pages.length]);
+  useEffect(() => {
+    queryClient.resetQueries("BestiaryList", {refetchPage: (page, index)=>index>=0});
+    queryClient.resetQueries(["BestiarySearch",querySnapshot], {active: true});
+  }, [sortQuery]);
+  const onScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: animatedY } } }],
+    {
+      useNativeDriver: true,
+    }
+  );
   const getItemLayout = useCallback(
-    (data: any, index: number) => ({
+    (_, index: number) => ({
       length: CARD_HEIGHT + 32,
       offset: (CARD_HEIGHT + 32) * index,
       index,
@@ -79,10 +107,14 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
     []
   );
 
+  const findMonsters = (query: string) => {
+    setQuerySnapshot(query);
+  };
+
   const _renderItem = ({ item, index }: { item: any; index: number }) => (
     <ListeItemAnimated
       key={item.name}
-      y={y}
+      y={animatedY}
       index={index}
       onPress={() => {
         navigation.navigate("IndividualMonsterPage", {
@@ -95,15 +127,62 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
     </ListeItemAnimated>
   );
 
+  const footerElem = () => (
+    <ListeItemAnimated
+      onPress={() => {
+        fetchNextPage();
+      }}
+      y={animatedY}
+      index={!!!querySnapshot ? footerIndex : 0}
+    >
+      {!isFetchingNextPage ? (
+        <Text style={{ alignSelf: "center" }}>
+          {hasNextPage && "Load More..."}
+        </Text>
+      ) : (
+        <ThemedLoader />
+      )}
+    </ListeItemAnimated>
+  );
+
+  const EmptyList = (
+    <>
+      {
+    filteredFetching || allFetching?  Array(8)
+        .fill(null)
+        .map((_, index) => (
+          <ListeItemAnimated
+            onPress={() => {}}
+            key={index}
+            y={animatedY}
+            index={index}
+            style={styles.centeredContent}
+          />
+        ))
+        :
+        <></>
+        }
+    </>
+  );
+
   return (
     <>
-      <MyModal visible={modal.isVisible} setVisibility={modal.toggle} />
+      <MyFilterModal
+        visible={modal.isVisible}
+        dismiss={modal.dismiss}
+        data={MONSTER_FILTERS}
+        setFilter={setSortQuery}
+      />
       <SafeBackGround style={[styles.container]}>
         <BestiaryQueryHeader
           goHome={() => navigation.navigate("Home")}
-          query={queryAddOn}
-          setQuery={setQueryAddOn}
-          fireOffQuery={async () => await djangoAsyncCall(false, true)}
+          queryDisplay={querySnapshot}
+          fireOffQuery={findMonsters}
+          containsData={filterdMonsterData?.data.results.length}
+          text={queryText}
+          setText={setQueryText}
+          showFilters={modal.show}
+          sortText={sortQuery}
         />
         <AnimatedFlatList
           overScrollMode="always"
@@ -111,23 +190,34 @@ export const BestiaryPage: Screen<Navigation> = ({ navigation }) => {
           style={{ width: "90%" }}
           indicatorStyle="white"
           bounces={false}
-          data={monstersArr}
-          extraData={monstersArr}
+          data={
+            !!querySnapshot
+              ? filterdMonsterData?.data.results
+              : allMonsterData?.pages.map((item) => item.results).flat()
+          }
+          extraData={allMonsterData}
           scrollToOverflowEnabled
           getItemLayout={getItemLayout}
-          maxToRenderPerBatch={21}
-          onEndReachedThreshold={3}
-          onEndReached={async () => {
-            await djangoAsyncCall(true, false);
-          }}
-          refreshing={loading}
-          onRefresh={async () => {
-            setMonstersArr([]);
-            await djangoAsyncCall(false, false);
-          }}
+          maxToRenderPerBatch={30}
+          refreshControl={
+            <RefreshControl
+              refreshing={allFetching || (!!querySnapshot && filteredFetching)}
+              onRefresh={() => {}}
+              title="Pull to refresh"
+              tintColor={theme.colors.border}
+              titleColor={theme.colors.text}
+              colors={[theme.colors.border]}
+              progressBackgroundColor={theme.colors.background}
+            />
+          }
+          ListEmptyComponent={EmptyList}
+          ListFooterComponent={
+            hasNextPage && !!!querySnapshot ? footerElem : null
+          }
           renderItem={_renderItem}
-          keyExtractor={(item: any) => {
-            return item.name;
+          contentContainerStyle={{ paddingBottom: 40 }}
+          keyExtractor={(item, index) => {
+            return index.toString();
           }}
           {...{ onScroll }}
         />
@@ -152,5 +242,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+  },
+  centeredContent: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
